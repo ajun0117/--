@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "ShouyeVC.h"
 
 @implementation AppDelegate
 
@@ -23,6 +24,8 @@
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
+    ShouyeVC *shouVC=[[ShouyeVC alloc]init];
+    self.window.rootViewController=shouVC;
     [self.window makeKeyAndVisible];
     return YES;
 }
