@@ -84,34 +84,39 @@
     [self.view addSubview:seg];
     [seg release];
     
+    self.myScrollV=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 44+30, 320, 460-44-30)];
+    myScrollV.delegate=self;
+    [self.view addSubview:myScrollV];
+    
+    
     self.zuixinTableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 44+30, 320, 460-44-30) style:UITableViewStylePlain];
     zuixinTableView.delegate=self;
     zuixinTableView.dataSource=self;
-    [self.view addSubview:zuixinTableView];
+    [myScrollV addSubview:zuixinTableView];
     [zuixinTableView release];
     
     self.hangngyeTableView=[[UITableView alloc]initWithFrame:CGRectMake(320, 44+30, 320, 460-44-30) style:UITableViewStylePlain];
     hangngyeTableView.delegate=self;
     hangngyeTableView.dataSource=self;
-    [self.view addSubview:hangngyeTableView];
+    [myScrollV addSubview:hangngyeTableView];
     [hangngyeTableView release];
     
     self.yingyongTableView=[[UITableView alloc]initWithFrame:CGRectMake(320*2, 44+30, 320, 460-44-30) style:UITableViewStylePlain];
     yingyongTableView.delegate=self;
     yingyongTableView.dataSource=self;
-    [self.view addSubview:yingyongTableView];
+    [myScrollV addSubview:yingyongTableView];
     [yingyongTableView release];
     
     self.jiazhiTableView=[[UITableView alloc]initWithFrame:CGRectMake(320*3, 44+30, 320, 460-44-30) style:UITableViewStylePlain];
     jiazhiTableView.delegate=self;
     jiazhiTableView.dataSource=self;
-    [self.view addSubview:jiazhiTableView];
+    [myScrollV addSubview:jiazhiTableView];
     [jiazhiTableView release];
     
     self.anquanTableView=[[UITableView alloc]initWithFrame:CGRectMake(320*4, 44+30, 320, 460-44-30) style:UITableViewStylePlain];
     anquanTableView.delegate=self;
     anquanTableView.dataSource=self;
-    [self.view addSubview:anquanTableView];
+    [myScrollV addSubview:anquanTableView];
     [anquanTableView release];
     
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
