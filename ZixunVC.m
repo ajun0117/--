@@ -4,7 +4,7 @@
 //
 //  Created by Ibokan on 12-11-27.
 //  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
-//  dsfdsdfds sdfsfsasdfasdf111111
+//  李俊阳
 
 #import "ZixunVC.h"
 #import "MD5.h"
