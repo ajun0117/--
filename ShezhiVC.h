@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ShezhiVC : UIViewController
+@interface ShezhiVC : UIViewController<UITableViewDelegate,UITableViewDataSource>
+@property(retain,nonatomic)UITableView *myTableView;
+@property(retain,nonatomic)NSArray *array;
 
 @end

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ChaxunVC : UIViewController<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
+@interface ChaxunVC : UIViewController<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,NSURLConnectionDataDelegate>
 {
     BOOL isChina;
 }
@@ -18,4 +18,8 @@
 @property(retain,nonatomic)UITableView *listTableView;
 @property(retain,nonatomic)NSMutableArray *englishH;
 @property(retain,nonatomic)NSMutableArray *chinaH;
+@property(retain,nonatomic)NSMutableData *receiveData;
+@property(retain,nonatomic)UITableView *resultTableView;
+
+-(NSString *)timestamp;
 @end

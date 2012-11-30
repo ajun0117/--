@@ -148,6 +148,14 @@
 		0F87D6061667230A0091A746 /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F87D5FE1667230A0091A746 /* SBJsonBase.m */; };
 		0F87D6071667230A0091A746 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F87D6001667230A0091A746 /* SBJsonParser.m */; };
 		0F87D6081667230A0091A746 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F87D6021667230A0091A746 /* SBJsonWriter.m */; };
+		0F87D6151667626C0091A746 /* blueArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F87D6121667626C0091A746 /* blueArrow.png */; };
+		0F87D6161667626C0091A746 /* EGORefreshTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F87D6141667626C0091A746 /* EGORefreshTableHeaderView.m */; };
+		0F87D61D1667722B0091A746 /* ShoucangVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F87D61C1667722B0091A746 /* ShoucangVC.m */; };
+		0F87D625166772960091A746 /* HistoryVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F87D624166772960091A746 /* HistoryVC.m */; };
+		0F87D628166772A70091A746 /* XinshouVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F87D627166772A70091A746 /* XinshouVC.m */; };
+		0F87D62B166772B50091A746 /* BanbenVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F87D62A166772B50091A746 /* BanbenVC.m */; };
+		0F87D62E166772C00091A746 /* YijianVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F87D62D166772C00091A746 /* YijianVC.m */; };
+		0F87D631166772D20091A746 /* BangdingVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F87D630166772D20091A746 /* BangdingVC.m */; };
 		0F88E8D31665B5B9009BDFD1 /* HouzhuiListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F88E8D21665B5B9009BDFD1 /* HouzhuiListVC.m */; };
 		0F88E8D716662F26009BDFD1 /* 虚线.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F88E8D616662F26009BDFD1 /* 虚线.png */; };
 /* End PBXBuildFile section */
@@ -314,6 +322,21 @@
 		0F87D6001667230A0091A746 /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
 		0F87D6011667230A0091A746 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		0F87D6021667230A0091A746 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+		0F87D6121667626C0091A746 /* blueArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blueArrow.png; sourceTree = "<group>"; };
+		0F87D6131667626C0091A746 /* EGORefreshTableHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGORefreshTableHeaderView.h; sourceTree = "<group>"; };
+		0F87D6141667626C0091A746 /* EGORefreshTableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGORefreshTableHeaderView.m; sourceTree = "<group>"; };
+		0F87D61B1667722B0091A746 /* ShoucangVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShoucangVC.h; sourceTree = "<group>"; };
+		0F87D61C1667722B0091A746 /* ShoucangVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShoucangVC.m; sourceTree = "<group>"; };
+		0F87D623166772960091A746 /* HistoryVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryVC.h; sourceTree = "<group>"; };
+		0F87D624166772960091A746 /* HistoryVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryVC.m; sourceTree = "<group>"; };
+		0F87D626166772A70091A746 /* XinshouVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XinshouVC.h; sourceTree = "<group>"; };
+		0F87D627166772A70091A746 /* XinshouVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XinshouVC.m; sourceTree = "<group>"; };
+		0F87D629166772B50091A746 /* BanbenVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BanbenVC.h; sourceTree = "<group>"; };
+		0F87D62A166772B50091A746 /* BanbenVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BanbenVC.m; sourceTree = "<group>"; };
+		0F87D62C166772C00091A746 /* YijianVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YijianVC.h; sourceTree = "<group>"; };
+		0F87D62D166772C00091A746 /* YijianVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YijianVC.m; sourceTree = "<group>"; };
+		0F87D62F166772D20091A746 /* BangdingVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BangdingVC.h; sourceTree = "<group>"; };
+		0F87D630166772D20091A746 /* BangdingVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BangdingVC.m; sourceTree = "<group>"; };
 		0F88E8D11665B5B9009BDFD1 /* HouzhuiListVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HouzhuiListVC.h; sourceTree = "<group>"; };
 		0F88E8D21665B5B9009BDFD1 /* HouzhuiListVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HouzhuiListVC.m; sourceTree = "<group>"; };
 		0F88E8D616662F26009BDFD1 /* 虚线.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "虚线.png"; path = "../虚线.png"; sourceTree = "<group>"; };
@@ -337,6 +360,7 @@
 		0F4237391664B77100259E43 = {
 			isa = PBXGroup;
 			children = (
+				0F87D617166762700091A746 /* 下拉刷新 */,
 				0F87D5F51667230A0091A746 /* JSON */,
 				0F87D5F0166720F20091A746 /* MD5 */,
 				0F88E8D51665FBBF009BDFD1 /* 重写cell */,
@@ -694,6 +718,12 @@
 		0F6CFB041664DD6500BC7AF3 /* 设置 */ = {
 			isa = PBXGroup;
 			children = (
+				0F87D6221667727B0091A746 /* 微博绑定 */,
+				0F87D621166772680091A746 /* 意见反馈 */,
+				0F87D620166772560091A746 /* 版本信息 */,
+				0F87D61F166772490091A746 /* 新手指南 */,
+				0F87D61E1667723F0091A746 /* 历史记录 */,
+				0F87D61A1667720C0091A746 /* 收藏 */,
 				0F6CFB051664DD7C00BC7AF3 /* ShezhiVC.h */,
 				0F6CFB061664DD7C00BC7AF3 /* ShezhiVC.m */,
 			);
@@ -727,6 +757,78 @@
 				0F87D6021667230A0091A746 /* SBJsonWriter.m */,
 			);
 			path = JSON;
+			sourceTree = "<group>";
+		};
+		0F87D6111667626C0091A746 /* ego */ = {
+			isa = PBXGroup;
+			children = (
+				0F87D6121667626C0091A746 /* blueArrow.png */,
+				0F87D6131667626C0091A746 /* EGORefreshTableHeaderView.h */,
+				0F87D6141667626C0091A746 /* EGORefreshTableHeaderView.m */,
+			);
+			path = ego;
+			sourceTree = "<group>";
+		};
+		0F87D617166762700091A746 /* 下拉刷新 */ = {
+			isa = PBXGroup;
+			children = (
+				0F87D6111667626C0091A746 /* ego */,
+			);
+			name = "下拉刷新";
+			sourceTree = "<group>";
+		};
+		0F87D61A1667720C0091A746 /* 收藏 */ = {
+			isa = PBXGroup;
+			children = (
+				0F87D61B1667722B0091A746 /* ShoucangVC.h */,
+				0F87D61C1667722B0091A746 /* ShoucangVC.m */,
+			);
+			name = "收藏";
+			sourceTree = "<group>";
+		};
+		0F87D61E1667723F0091A746 /* 历史记录 */ = {
+			isa = PBXGroup;
+			children = (
+				0F87D623166772960091A746 /* HistoryVC.h */,
+				0F87D624166772960091A746 /* HistoryVC.m */,
+			);
+			name = "历史记录";
+			sourceTree = "<group>";
+		};
+		0F87D61F166772490091A746 /* 新手指南 */ = {
+			isa = PBXGroup;
+			children = (
+				0F87D626166772A70091A746 /* XinshouVC.h */,
+				0F87D627166772A70091A746 /* XinshouVC.m */,
+			);
+			name = "新手指南";
+			sourceTree = "<group>";
+		};
+		0F87D620166772560091A746 /* 版本信息 */ = {
+			isa = PBXGroup;
+			children = (
+				0F87D629166772B50091A746 /* BanbenVC.h */,
+				0F87D62A166772B50091A746 /* BanbenVC.m */,
+			);
+			name = "版本信息";
+			sourceTree = "<group>";
+		};
+		0F87D621166772680091A746 /* 意见反馈 */ = {
+			isa = PBXGroup;
+			children = (
+				0F87D62C166772C00091A746 /* YijianVC.h */,
+				0F87D62D166772C00091A746 /* YijianVC.m */,
+			);
+			name = "意见反馈";
+			sourceTree = "<group>";
+		};
+		0F87D6221667727B0091A746 /* 微博绑定 */ = {
+			isa = PBXGroup;
+			children = (
+				0F87D62F166772D20091A746 /* BangdingVC.h */,
+				0F87D630166772D20091A746 /* BangdingVC.m */,
+			);
+			name = "微博绑定";
 			sourceTree = "<group>";
 		};
 		0F88E8D51665FBBF009BDFD1 /* 重写cell */ = {
@@ -907,6 +1009,7 @@
 				0F6CFAED1664C4E400BC7AF3 /* 背景.png in Resources */,
 				0F6CFAEE1664C4E400BC7AF3 /* 返回按钮.png in Resources */,
 				0F88E8D716662F26009BDFD1 /* 虚线.png in Resources */,
+				0F87D6151667626C0091A746 /* blueArrow.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -935,6 +1038,13 @@
 				0F87D6061667230A0091A746 /* SBJsonBase.m in Sources */,
 				0F87D6071667230A0091A746 /* SBJsonParser.m in Sources */,
 				0F87D6081667230A0091A746 /* SBJsonWriter.m in Sources */,
+				0F87D6161667626C0091A746 /* EGORefreshTableHeaderView.m in Sources */,
+				0F87D61D1667722B0091A746 /* ShoucangVC.m in Sources */,
+				0F87D625166772960091A746 /* HistoryVC.m in Sources */,
+				0F87D628166772A70091A746 /* XinshouVC.m in Sources */,
+				0F87D62B166772B50091A746 /* BanbenVC.m in Sources */,
+				0F87D62E166772C00091A746 /* YijianVC.m in Sources */,
+				0F87D631166772D20091A746 /* BangdingVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

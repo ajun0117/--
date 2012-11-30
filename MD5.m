@@ -11,7 +11,6 @@
 
 @implementation MD5
 
-//此处需要在我们已经写好的MD5类中添加⽅方法
 + (NSString *)md5Digest:(NSString *)str
 {
     const char *cStr = [str UTF8String];
@@ -24,6 +23,5 @@
              result[13], result[14], result[15]
              ] uppercaseString];
 }
-//copy过去即可,别忘记再.h⽂文件中添加⽅方法声明 
 
 @end

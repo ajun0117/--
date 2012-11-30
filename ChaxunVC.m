@@ -8,18 +8,21 @@
 
 #import "ChaxunVC.h"
 #import "MoreChaxunVC.h"
+#import "JSON.h"
 
 @implementation ChaxunVC
 @synthesize searTextF;
 @synthesize englishBtn,chinaBtn;
 @synthesize listTableView;
 @synthesize englishH,chinaH;
+@synthesize receiveData;
+@synthesize resultTableView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        // Custom initializationd
         self.englishH=[NSMutableArray array];
         self.chinaH=[NSMutableArray array];
         isChina=NO;
@@ -136,6 +139,13 @@
     [chinaBtn addTarget:self action:@selector(china) forControlEvents:UIControlEventTouchUpInside];
     chinaBtn.frame=CGRectMake(140, 44+15+40, 80, 20);
     [self.view addSubview:chinaBtn];
+    
+//    self.resultTableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 120, 320, 460-120) style:UITableViewStylePlain];
+//    resultTableView.delegate=self;
+//    resultTableView.dataSource=self;
+//    [self.view addSubview:resultTableView];
+//    [resultTableView release];
+    
 
 }
 -(void)english{
@@ -222,6 +232,7 @@
     if (!cell) {
         cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ind];
     }
+    cell.selectionStyle=UITableViewCellSelectionStyleGray;
     if (isChina) {
     cell.textLabel.text=[chinaH objectAtIndex:indexPath.row];
     }
@@ -231,9 +242,58 @@
     return cell;
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [self.searTextF resignFirstResponder];
+#pragma mark- 请求时间戳
+-(NSString *)timestamp{
+    NSString *timeStr=[NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSinceNow]];
+    return timeStr;
 }
+
+
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    UITableViewCell *cell=[tableView cellForRowAtIndexPath:indexPath];
+    [self.searTextF resignFirstResponder];
+    
+    NSDictionary *dic=[NSDictionary dictionaryWithObjectsAndKeys:cell.textLabel.text,@"domainnames", nil];
+    NSString *tokenStr=[NSString stringWithFormat:@"860173013153543_%@",[self timestamp]];
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            dic,@"data",
+                            @"1.0",@"v",
+                            @"checkdomain",@"method",
+                            @"news",@"module",
+                            tokenStr,@"trid",
+                            @"ios",@"client",nil];
+    NSURL *url=[NSURL URLWithString:@"http://hiapp.hichina.com/hiapp/json/checkdomain/"];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:15];
+    [request setHTTPMethod:@"POST"];
+    NSString *arguments=[NSString stringWithFormat:@"req=%@",params];
+    NSData *postData=[arguments dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:postData];
+    [NSURLConnection connectionWithRequest:request delegate:self];
+    [request release];
+}
+
+-(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
+    self.receiveData=[NSMutableData data];
+}
+
+-(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
+    [receiveData appendData:data];
+}
+
+-(void)connectionDidFinishLoading:(NSURLConnection *)connection{
+    NSLog(@"receiveData-------------%@",receiveData);
+    NSString *receiveStr=[[NSString alloc]initWithData:receiveData encoding:NSUTF8StringEncoding];
+    NSDictionary *dic=[receiveStr JSONValue];
+    
+    NSLog(@"dic------------%@",dic);
+}
+
+-(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
+    NSLog(@"error----------%@",[error localizedDescription]);
+}
+
 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     [self.searTextF resignFirstResponder];
@@ -251,6 +311,19 @@
     MoreChaxunVC *moreVC=[[MoreChaxunVC alloc]init];
     moreVC.navigationController.navigationBarHidden=YES;
     [self.navigationController pushViewController:moreVC animated:YES];
+}
+
+- (void)dealloc
+{
+    [searTextF release];
+    [englishH release];
+    [chinaH release];
+    [englishBtn release];
+    [chinaBtn release];
+    [listTableView release];
+    [receiveData release];
+    [resultTableView release];
+    [super dealloc];
 }
 
 - (void)viewDidUnload
