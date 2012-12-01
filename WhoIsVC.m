@@ -15,6 +15,7 @@
 @synthesize resultDic,resultTableView,receiveData;
 @synthesize xiangBtn;
 @synthesize picArray,XinxiArray,nameArray;
+@synthesize wZTableView,wzStr;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -86,12 +87,28 @@
     [commitBtn addTarget:self action:@selector(commit) forControlEvents:UIControlEventTouchUpInside];
     [topIM addSubview:commitBtn];
     
-    self.resultTableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 44, 320, 460-44) style:UITableViewStyleGrouped];
+    self.resultTableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 44+20, 320, 460-44-20) style:UITableViewStyleGrouped];
     resultTableView.backgroundColor=[UIColor clearColor];
     resultTableView.delegate=self;
     resultTableView.dataSource=self;
     [self.view addSubview:resultTableView];
     [resultTableView release];
+    
+    self.wZTableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 44+30, 320, 460-44-30) style:UITableViewStylePlain];
+    wZTableView.backgroundColor=[UIColor clearColor];
+    wZTableView.delegate=self;
+    wZTableView.dataSource=self;
+    wZTableView.hidden=YES;
+    [self.view addSubview:wZTableView];
+    [wZTableView release];
+    
+    self.xiangBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+    [xiangBtn setBackgroundImage:[UIImage imageNamed:@"scoll_home"] forState:UIControlStateNormal];
+    [xiangBtn addTarget:self action:@selector(xiangxi_gaiyao:) forControlEvents:UIControlEventTouchUpInside];
+    [xiangBtn setTitle:@"点击查看完整信息" forState:UIControlStateNormal];
+    [xiangBtn setTitle:@"点击查看概要信息" forState:UIControlStateSelected];
+    xiangBtn.frame=CGRectMake(10,44, 300, 30);
+    [self.view addSubview:xiangBtn];
     
     [self searWhoIs];
 }
@@ -134,9 +151,7 @@
     NSLog(@"dic-------------%@",dic);
     NSDictionary *dicc=[dic objectForKey:@"results"];
     self.resultDic=[dicc objectForKey:@"whois"];
-
-    
-    
+    self.wzStr=[resultDic objectForKey:@"content"];
     [XinxiArray addObjectsFromArray:[NSArray arrayWithObjects:[resultDic objectForKey:@"domainname"],
                                     [resultDic objectForKey:@"registrantname"],
                                      [resultDic objectForKey:@"registrantorganization"],
@@ -166,44 +181,81 @@
     return timeStr;
 }
 
-
-
-
 #pragma mark---
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    if (tableView==wZTableView) {
+        return 1;
+    }
         return [nameArray count];
 }
 
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    self.xiangBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    [xiangBtn setBackgroundImage:[UIImage imageNamed:@"scoll_home"] forState:UIControlStateNormal];
-    [xiangBtn setTitle:@"点击查看完整信息" forState:UIControlStateNormal];
-    [xiangBtn setTitle:@"点击查看概要信息" forState:UIControlStateSelected];
-    return xiangBtn;
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (tableView==wZTableView) {
+        UITableViewCell *cell=[self tableView:wZTableView cellForRowAtIndexPath:indexPath];
+        return cell.frame.size.height;
+    }
+    return 40;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 30;
-}
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (tableView==wZTableView) {
+        UITableViewCell *cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+        cell.selectionStyle=UITableViewCellSelectionStyleNone;
+        wZTableView.separatorStyle=UITableViewCellSeparatorStyleSingleLineEtched;
+        if (wzStr) {
+        UILabel *label=[[UILabel alloc]initWithFrame:CGRectMake(10, 0, 300, 40)];
+        label.numberOfLines=0;
+        label.lineBreakMode=UILineBreakModeWordWrap;
+            label.font=[UIFont systemFontOfSize:12];
+            label.backgroundColor=[UIColor clearColor];
+        label.text=wzStr;
+        CGSize size=[label.text sizeWithFont:[UIFont systemFontOfSize:12] constrainedToSize:CGSizeMake(300, 3000) lineBreakMode:UILineBreakModeWordWrap];
+        CGRect rect=label.frame;
+        rect.size.height=size.height;
+        label.frame=rect;
+        [cell addSubview:label];
+        cell.frame=label.frame;
+        }
+        return cell;
+    }
+    else{
     static NSString *ind=@"cell";
     UITableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:ind];
     if (!cell) {
         cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ind];
-        UILabel *label=[[UILabel alloc]initWithFrame:CGRectMake(150, 10, 160, 15)];
+        UILabel *label=[[UILabel alloc]initWithFrame:CGRectMake(150, 0, 160, 40)];
+        label.numberOfLines=2;
+        label.lineBreakMode=UILineBreakModeWordWrap;
+        
         label.tag=100;
         label.backgroundColor=[UIColor clearColor];
         [cell addSubview:label];
         [label release];
     }
+    cell.selectionStyle=UITableViewCellSelectionStyleNone;
     cell.imageView.image=[UIImage imageNamed:[picArray objectAtIndex:indexPath.row]];
     NSLog(@"nameArray-----%@",nameArray);
     cell.textLabel.text=[nameArray objectAtIndex:indexPath.row];
     UILabel *label=(UILabel *)[cell viewWithTag:100];
-    label.text=[XinxiArray objectAtIndex:indexPath.row];
-
+    label.text=[XinxiArray objectAtIndex:indexPath.row]; 
     return cell;
+    }
+}
+
+
+-(void)xiangxi_gaiyao:(UIButton *)sender{
+    if (sender.selected==NO) {
+        sender.selected=YES;
+        wZTableView.hidden=NO;
+        resultTableView.hidden=YES;
+        [wZTableView reloadData];
+    }
+    else{
+        sender.selected=NO;
+        wZTableView.hidden=YES;
+        resultTableView.hidden=NO;
+    }
 }
 
 -(void)fanhui{

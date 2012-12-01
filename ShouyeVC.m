@@ -128,7 +128,7 @@
 
 - (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel
 {
-	return 0;
+	return 20;
 }
 
 - (NSUInteger)numberOfVisibleItemsInCarousel:(iCarousel *)carousel

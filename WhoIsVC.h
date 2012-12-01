@@ -17,6 +17,8 @@
 @property(retain,nonatomic)NSMutableArray *picArray;
 @property(retain,nonatomic)NSMutableArray *XinxiArray;
 @property(retain,nonatomic)NSMutableArray *nameArray;
+@property(retain,nonatomic)UITableView *wZTableView;
+@property(retain,nonatomic)NSString *wzStr;
 -(void)searWhoIs;
 -(NSString *)timestamp;
 @end
