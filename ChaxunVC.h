@@ -20,6 +20,6 @@
 @property(retain,nonatomic)NSMutableArray *chinaH;
 @property(retain,nonatomic)NSMutableData *receiveData;
 @property(retain,nonatomic)UITableView *resultTableView;
-
+@property(retain,nonatomic)NSMutableArray *resultArray;
 -(NSString *)timestamp;
 @end

@@ -2,7 +2,7 @@
 // Prefix header for all source files of the '万网' target in the '万网' project
 //
 
-//#define TOKEN 860173013153543
+#define TOKEN @"860173013153543oo"
 #import <Availability.h>
 
 

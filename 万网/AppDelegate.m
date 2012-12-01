@@ -24,10 +24,30 @@
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
+    [self zhuceTokenmrthod];
     ShouyeVC *shouVC=[[ShouyeVC alloc]init];
     self.window.rootViewController=shouVC;
     [self.window makeKeyAndVisible];
     return YES;
+}
+
+-(void)zhuceTokenmrthod{
+    NSDictionary *dic=[NSDictionary dictionaryWithObjectsAndKeys:@"860173013153543oo",@"token", nil];
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            dic,@"data",
+                            @"1.0",@"v",
+                            @"Tokenmrthod",@"method",
+                            @"ios",@"client",nil];
+    NSURL *url=[NSURL URLWithString:@"http://hiapp.hichina.com/hiapp/json/tokenmrthod/"];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:15];
+    [request setHTTPMethod:@"POST"];
+    NSString *arguments=[NSString stringWithFormat:@"req=%@",params];
+    NSData *postData=[arguments dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:postData];
+    NSError *error;
+    NSData *data=[NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
+    NSLog(@"%@",[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding]);
+    [request release];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

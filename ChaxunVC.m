@@ -9,6 +9,7 @@
 #import "ChaxunVC.h"
 #import "MoreChaxunVC.h"
 #import "JSON.h"
+#import "WhoIsVC.h"
 
 @implementation ChaxunVC
 @synthesize searTextF;
@@ -17,6 +18,7 @@
 @synthesize englishH,chinaH;
 @synthesize receiveData;
 @synthesize resultTableView;
+@synthesize resultArray;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -25,6 +27,7 @@
         // Custom initializationd
         self.englishH=[NSMutableArray array];
         self.chinaH=[NSMutableArray array];
+        self.resultArray=[NSMutableArray array];
         isChina=NO;
     }
     return self;
@@ -140,13 +143,14 @@
     chinaBtn.frame=CGRectMake(140, 44+15+40, 80, 20);
     [self.view addSubview:chinaBtn];
     
-//    self.resultTableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 120, 320, 460-120) style:UITableViewStylePlain];
-//    resultTableView.delegate=self;
-//    resultTableView.dataSource=self;
-//    [self.view addSubview:resultTableView];
-//    [resultTableView release];
+    self.resultTableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 120, 320, 460-120) style:UITableViewStyleGrouped];
+    resultTableView.backgroundColor=[UIColor clearColor];
+    resultTableView.delegate=self;
+    resultTableView.dataSource=self;
+    resultTableView.hidden=YES;
+    [self.view addSubview:resultTableView];
+    [resultTableView release];
     
-
 }
 -(void)english{
     if (chinaBtn.selected==YES) {
@@ -170,6 +174,7 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    resultTableView.hidden=YES;
     [UIView animateWithDuration:0.3 animations:^{
         listTableView.frame=CGRectMake(0,120, 320, 460-120);
     }];
@@ -220,10 +225,15 @@
 
 #pragma mark---
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (isChina) {
-        return [chinaH count];
+    if (tableView==resultTableView) {
+        return [resultArray count];
     }
-        return [englishH count];
+    else{
+        if (isChina) {
+            return [chinaH count];
+        }
+            return [englishH count];
+    }
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -231,47 +241,109 @@
     UITableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:ind];
     if (!cell) {
         cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ind];
+        if (tableView==resultTableView) {
+            UILabel *label=[[UILabel alloc]initWithFrame:CGRectMake(200, 16, 60, 15)];
+            label.tag=100;
+            [cell addSubview:label];
+            UIButton *button1=[UIButton buttonWithType:UIButtonTypeCustom];
+            button1.tag=200;
+            button1.frame=CGRectMake(260, 10, 20, 20);
+            [cell addSubview:button1];
+            UIButton *button2=[UIButton buttonWithType:UIButtonTypeCustom];
+            button2.frame=CGRectMake(290, 10, 20, 20);
+            [cell addSubview:button2];
+            [button2 setBackgroundImage:[UIImage imageNamed:@"keep.png"] forState:UIControlStateNormal];
+            [button2 addTarget:self action:@selector(shoucang:) forControlEvents:UIControlEventTouchUpInside];
+            [label release];
+        }
     }
-    cell.selectionStyle=UITableViewCellSelectionStyleGray;
-    if (isChina) {
-    cell.textLabel.text=[chinaH objectAtIndex:indexPath.row];
+    if (tableView==resultTableView) {
+        cell.selectionStyle=UITableViewCellSelectionStyleNone;
+        NSDictionary *dic=[resultArray objectAtIndex:indexPath.row];
+        NSString *text = [dic objectForKey:@"name"];
+        cell.textLabel.text=text;
+        UILabel *label=(UILabel *)[cell viewWithTag:100];
+        UIButton *button1=(UIButton *)[cell viewWithTag:200];
+        if ([[dic objectForKey:@"status"] intValue]==0) {
+            label.textColor=[UIColor greenColor];
+            label.text=@"未注册";
+            [button1 setBackgroundImage:[UIImage imageNamed:@"cart.png"] forState:UIControlStateNormal];
+            [button1 removeTarget:self action:@selector(toWhoIs:) forControlEvents:UIControlEventTouchUpInside];
+            [button1 addTarget:self action:@selector(toBuyIt:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        else{
+            label.textColor=[UIColor redColor];
+             label.text=@"已注册";
+            [button1 setBackgroundImage:[UIImage imageNamed:@"detailbutton.png"] forState:UIControlStateNormal];
+            [button1 removeTarget:self action:@selector(toBuyIt:) forControlEvents:UIControlEventTouchUpInside];
+            [button1 addTarget:self action:@selector(toWhoIs:) forControlEvents:UIControlEventTouchUpInside];
+        }
     }
     else{
-    cell.textLabel.text=[englishH objectAtIndex:indexPath.row];
+        cell.selectionStyle=UITableViewCellSelectionStyleGray;
+        if (isChina) {
+        cell.textLabel.text=[chinaH objectAtIndex:indexPath.row];
+        }
+        else{
+        cell.textLabel.text=[englishH objectAtIndex:indexPath.row];
+        }
     }
     return cell;
 }
 
+
+-(void)toBuyIt:(UIButton *)sender{
+    NSLog(@"买它");
+}
+
+-(void)toWhoIs:(UIButton *)sender{
+    NSLog(@"WhoIs");
+    WhoIsVC *whoVC=[[WhoIsVC alloc]init];
+    UITableViewCell *cell=(UITableViewCell *)sender.superview;
+    whoVC.nameStr=cell.textLabel.text;
+    whoVC.navigationController.navigationBarHidden=YES;
+    [self.navigationController pushViewController:whoVC animated:YES];
+}
+
+-(void)shoucang:(UIButton *)sender{
+    NSLog(@"收藏它");
+}
+
 #pragma mark- 请求时间戳
 -(NSString *)timestamp{
-    NSString *timeStr=[NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSinceNow]];
+    NSString *timeStr=[NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
+    NSLog(@"timeStr----%@",timeStr);
     return timeStr;
 }
 
-
-
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (tableView==listTableView) {
+    listTableView.frame=CGRectMake(0, 120-460, 320, 460-120);
+    resultTableView.hidden=NO;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     UITableViewCell *cell=[tableView cellForRowAtIndexPath:indexPath];
     [self.searTextF resignFirstResponder];
-    
-    NSDictionary *dic=[NSDictionary dictionaryWithObjectsAndKeys:cell.textLabel.text,@"domainnames", nil];
-    NSString *tokenStr=[NSString stringWithFormat:@"860173013153543_%@",[self timestamp]];
+    searTextF.text=cell.textLabel.text;
+    NSString *encodeStr=[searTextF.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];//进行编码
+    NSDictionary *dic=[NSDictionary dictionaryWithObjectsAndKeys:encodeStr,@"domainnames", nil];
+    NSLog(@"dic----%@",dic);
+    NSString *tokenStr=[NSString stringWithFormat:@"%@_%@",TOKEN,[self timestamp]];
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
                             dic,@"data",
                             @"1.0",@"v",
                             @"checkdomain",@"method",
-                            @"news",@"module",
                             tokenStr,@"trid",
                             @"ios",@"client",nil];
     NSURL *url=[NSURL URLWithString:@"http://hiapp.hichina.com/hiapp/json/checkdomain/"];
     NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:15];
     [request setHTTPMethod:@"POST"];
     NSString *arguments=[NSString stringWithFormat:@"req=%@",params];
+        NSLog(@"arguments -----%@",arguments);
     NSData *postData=[arguments dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:postData];
     [NSURLConnection connectionWithRequest:request delegate:self];
     [request release];
+    }
 }
 
 -(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
@@ -286,8 +358,11 @@
     NSLog(@"receiveData-------------%@",receiveData);
     NSString *receiveStr=[[NSString alloc]initWithData:receiveData encoding:NSUTF8StringEncoding];
     NSDictionary *dic=[receiveStr JSONValue];
-    
-    NSLog(@"dic------------%@",dic);
+     NSLog(@"dic-------------%@",dic);
+    NSDictionary *dicc=[dic objectForKey:@"results"];
+    [resultArray removeAllObjects];
+    [resultArray addObjectsFromArray:[dicc objectForKey:@"domainnames"]];
+    [resultTableView reloadData];
 }
 
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
@@ -300,7 +375,28 @@
 }
 
 -(void)toSearch{
-    
+    [searTextF resignFirstResponder];
+    listTableView.frame=CGRectMake(0, 120-460, 320, 460-120);
+    resultTableView.hidden=NO;
+    NSString *encodeStr=[searTextF.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];//进行编码
+    NSDictionary *dic=[NSDictionary dictionaryWithObjectsAndKeys:encodeStr,@"domainnames", nil];
+    NSLog(@"dic----%@",dic);
+    NSString *tokenStr=[NSString stringWithFormat:@"%@_%@",TOKEN,[self timestamp]];
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            dic,@"data",
+                            @"1.0",@"v",
+                            @"checkdomain",@"method",
+                            tokenStr,@"trid",
+                            @"ios",@"client",nil];
+    NSURL *url=[NSURL URLWithString:@"http://hiapp.hichina.com/hiapp/json/checkdomain/"];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:15];
+    [request setHTTPMethod:@"POST"];
+    NSString *arguments=[NSString stringWithFormat:@"req=%@",params];
+    NSLog(@"arguments -----%@",arguments);
+    NSData *postData=[arguments dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:postData];
+    [NSURLConnection connectionWithRequest:request delegate:self];
+    [request release];
 }
 
 -(void)toZhuye{

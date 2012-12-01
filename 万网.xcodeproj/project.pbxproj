@@ -158,6 +158,8 @@
 		0F87D631166772D20091A746 /* BangdingVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F87D630166772D20091A746 /* BangdingVC.m */; };
 		0F88E8D31665B5B9009BDFD1 /* HouzhuiListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F88E8D21665B5B9009BDFD1 /* HouzhuiListVC.m */; };
 		0F88E8D716662F26009BDFD1 /* 虚线.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F88E8D616662F26009BDFD1 /* 虚线.png */; };
+		0F892B281668B91800412DF6 /* WhoIsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F892B271668B91800412DF6 /* WhoIsVC.m */; };
+		0F892B2A1668D89F00412DF6 /* File in Resources */ = {isa = PBXBuildFile; fileRef = 0F892B291668D89F00412DF6 /* File */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -340,6 +342,9 @@
 		0F88E8D11665B5B9009BDFD1 /* HouzhuiListVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HouzhuiListVC.h; sourceTree = "<group>"; };
 		0F88E8D21665B5B9009BDFD1 /* HouzhuiListVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HouzhuiListVC.m; sourceTree = "<group>"; };
 		0F88E8D616662F26009BDFD1 /* 虚线.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "虚线.png"; path = "../虚线.png"; sourceTree = "<group>"; };
+		0F892B261668B91800412DF6 /* WhoIsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhoIsVC.h; sourceTree = "<group>"; };
+		0F892B271668B91800412DF6 /* WhoIsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhoIsVC.m; sourceTree = "<group>"; };
+		0F892B291668D89F00412DF6 /* File */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = File; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -413,6 +418,7 @@
 				0F4237511664B77200259E43 /* InfoPlist.strings */,
 				0F4237541664B77200259E43 /* main.m */,
 				0F4237561664B77200259E43 /* 万网-Prefix.pch */,
+				0F892B291668D89F00412DF6 /* File */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -678,6 +684,7 @@
 		0F6CFAF41664CED200BC7AF3 /* 域名查询 */ = {
 			isa = PBXGroup;
 			children = (
+				0F892B241668B8E600412DF6 /* WHOIS */,
 				0F6CFAF11664CB6800BC7AF3 /* ChaxunVC.h */,
 				0F6CFAF21664CB6800BC7AF3 /* ChaxunVC.m */,
 				0F6CFAF51664D18A00BC7AF3 /* MoreChaxunVC.h */,
@@ -836,6 +843,15 @@
 			children = (
 			);
 			name = "重写cell";
+			sourceTree = "<group>";
+		};
+		0F892B241668B8E600412DF6 /* WHOIS */ = {
+			isa = PBXGroup;
+			children = (
+				0F892B261668B91800412DF6 /* WhoIsVC.h */,
+				0F892B271668B91800412DF6 /* WhoIsVC.m */,
+			);
+			name = WHOIS;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1010,6 +1026,7 @@
 				0F6CFAEE1664C4E400BC7AF3 /* 返回按钮.png in Resources */,
 				0F88E8D716662F26009BDFD1 /* 虚线.png in Resources */,
 				0F87D6151667626C0091A746 /* blueArrow.png in Resources */,
+				0F892B2A1668D89F00412DF6 /* File in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1045,6 +1062,7 @@
 				0F87D62B166772B50091A746 /* BanbenVC.m in Sources */,
 				0F87D62E166772C00091A746 /* YijianVC.m in Sources */,
 				0F87D631166772D20091A746 /* BangdingVC.m in Sources */,
+				0F892B281668B91800412DF6 /* WhoIsVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

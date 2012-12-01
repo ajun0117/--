@@ -9,6 +9,7 @@
 #import "MoreChaxunVC.h"
 #import "ChaxunVC.h"
 #import "HouzhuiListVC.h"
+#import "JSON.h"
 #define ENGLISH @"最多可搜索十个域名,每行输入一个,如:\ntabobao\nsina\nbbboo"
 #define CHINA @"最多可搜索十个域名,每行输入一个,如:\n淘宝.com\n新浪.com\n中国.com"
 
@@ -16,6 +17,10 @@
 @synthesize englishBtn,chinaBtn;
 @synthesize searchV;
 @synthesize placeL;
+@synthesize selectedArray;
+@synthesize receiveData;
+@synthesize resultArray;
+@synthesize resultTableView;
 //@synthesize lineArray;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -24,6 +29,7 @@
     if (self) {
         // Custom initialization
 //        self.lineArray=[NSMutableArray array];
+        self.selectedArray=[NSMutableArray array];//数组初始化
     }
     return self;
 }
@@ -50,6 +56,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [selectedArray addObject:@".com"];//默认选择.com后缀
     lineCount=0;
     isChina=NO;
     UIImageView *bgIM=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"suffix_background.png"]];
@@ -148,6 +155,15 @@
     [starBtn addTarget:self action:@selector(startChaxun) forControlEvents:UIControlEventTouchUpInside];
     [starBtn setTitle:@"开始查询" forState:UIControlStateNormal];
     [self.view addSubview:starBtn];
+    
+    self.resultTableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 240, 320, 460-240) style:UITableViewStyleGrouped];
+    resultTableView.backgroundColor=[UIColor clearColor];
+    resultTableView.delegate=self;
+    resultTableView.dataSource=self;
+    resultTableView.hidden=YES;         //初始隐藏
+    [self.view addSubview:resultTableView];
+    [resultTableView release];
+    
 }
 
 -(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
@@ -179,6 +195,28 @@
     }
 }
 
+
+#pragma mark---
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+        return [resultArray count];
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    static NSString *ind=@"cell";
+    UITableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:ind];
+    if (!cell) {
+        cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ind];
+    }
+    if (tableView==resultTableView) {
+        cell.selectionStyle=UITableViewCellSelectionStyleNone;
+        NSDictionary *dic=[resultArray objectAtIndex:indexPath.row];
+        NSString *text = [dic objectForKey:@"name"];
+        cell.textLabel.text=text;
+    }
+    return cell;
+}
+
+
 -(void)addTheLine:(CGRect)frame{
     UIImageView *theLine=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"虚线.png"]];
     theLine.frame=frame;
@@ -193,9 +231,66 @@
     [self.navigationController pushViewController:houzhuiVC animated:YES];
 }
 
--(void)startChaxun{
-    
+#pragma mark- 请求时间戳
+-(NSString *)timestamp{
+    NSString *timeStr=[NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
+    NSLog(@"timeStr----%@",timeStr);
+    return timeStr;
 }
+
+-(void)startChaxun{
+    [searchV resignFirstResponder];
+    resultTableView.hidden=NO;
+    NSMutableArray *array=[NSMutableArray array];
+    for (NSString *str in selectedArray) {
+        NSString *wanzhengStr=[NSString stringWithFormat:@"%@%@",searchV.text,str];
+        NSString *encodeStr=[wanzhengStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];//进行编码
+        [array addObject:encodeStr];
+    }
+    NSDictionary *dic=[NSDictionary dictionaryWithObjectsAndKeys:[NSArray arrayWithObjects:@"123.com",@"123.cn", nil],@"domainnames", nil];
+    NSLog(@"dic----%@",dic);
+    NSString *tokenStr=[NSString stringWithFormat:@"%@_%@",TOKEN,[self timestamp]];
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            dic,@"data",
+                            @"1.0",@"v",
+                            @"checkdomain",@"method",
+                            tokenStr,@"trid",
+                            @"ios",@"client",nil];
+    NSURL *url=[NSURL URLWithString:@"http://hiapp.hichina.com/hiapp/json/checkdomain/"];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:15];
+    [request setHTTPMethod:@"POST"];
+    NSString *arguments=[NSString stringWithFormat:@"req=%@",params];
+    NSLog(@"arguments -----%@",arguments);
+    NSData *postData=[arguments dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:postData];
+    [NSURLConnection connectionWithRequest:request delegate:self];
+    [request release];
+}
+
+-(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
+    self.receiveData=[NSMutableData data];
+}
+
+-(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
+    [receiveData appendData:data];
+}
+
+-(void)connectionDidFinishLoading:(NSURLConnection *)connection{
+    NSLog(@"receiveData-------------%@",receiveData);
+    NSString *receiveStr=[[NSString alloc]initWithData:receiveData encoding:NSUTF8StringEncoding];
+    NSDictionary *dic=[receiveStr JSONValue];
+    NSLog(@"dic-------------%@",dic);
+    NSDictionary *dicc=[dic objectForKey:@"results"];
+    [resultArray removeAllObjects];
+    [resultArray addObjectsFromArray:[dicc objectForKey:@"domainnames"]];
+    [resultTableView reloadData];
+}
+
+-(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
+    NSLog(@"error----------%@",[error localizedDescription]);
+}
+
+
 
 -(void)english{
     if (chinaBtn.selected==YES) {

@@ -76,11 +76,12 @@
     [label release];
     
     self.seg=[[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"最新",@"行业",@"应用",@"价值",@"安全",nil]];
-    seg.segmentedControlStyle=UISegmentedControlStyleBar;//次类型才能实现点击后图片大小完全填充按钮
+    seg.segmentedControlStyle=UISegmentedControlStyleBar;//此类型才能实现点击后图片大小完全填充按钮
 //    seg.tintColor=[UIColor blackColor];
     seg.frame=CGRectMake(0, 44, 320, 30);
     [seg setBackgroundImage:[UIImage imageNamed:@"按钮.png"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [seg setBackgroundImage:[UIImage imageNamed:@"按下.png"] forState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
+    [seg setTitleTextAttributes:[NSDictionary dictionaryWithObject:[UIColor blackColor] forKey:UITextAttributeTextColor] forState:UIControlStateNormal];
     seg.selectedSegmentIndex=0;
     [seg addTarget:self action:@selector(segmentedControl:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:seg];
@@ -182,7 +183,6 @@
                             @"hello",@"appid",
                             @"111111",@"appkey",nil];
     [self jiamiAndQingqiu:params];
-    
     
 }
 
@@ -444,7 +444,7 @@
 }
 
 -(NSString *)timestamp{
-    NSString *timeStr=[NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSinceNow]];
+    NSString *timeStr=[NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
     return timeStr;
 }
 
