@@ -7,13 +7,26 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ASINetworkQueue.h"
 
-@interface TijianVC : UIViewController<UITextFieldDelegate>
+@interface TijianVC : UIViewController<UITextFieldDelegate,ASIHTTPRequestDelegate>
+@property(retain,nonatomic)UIImageView *chushiMV;
+@property(retain,nonatomic)UILabel *firstL;
+@property(retain,nonatomic)UIImageView *xiaolianMV;
+@property(retain,nonatomic)UIButton *buyBtn;
+@property(retain,nonatomic)UIButton *shoucangBtn;
+@property(retain,nonatomic)UIButton *jianshiBtn;
+@property(retain,nonatomic)UIImageView *zhuangtaiMV;
+@property(retain,nonatomic)UIImageView *dnsMV;
+@property(retain,nonatomic)UIImageView *fangwenMV;
 @property(retain,nonatomic)UITextField *searTextF;
 @property(retain,nonatomic)UILabel *countL;
 @property(retain,nonatomic)NSString *tokenStr;
 @property(retain,nonatomic)NSDictionary *dic;//domainname字典
+@property(retain,nonatomic)ASINetworkQueue *que;    //请求队列
+//@property(retain,nonatomic)NSString *zhuangtaiStr;
+//@property(retain,nonatomic)NSString *dnsStr;
+@property(retain,nonatomic)NSMutableDictionary *xiangxiDic;
 -(NSString *)timestamp;
--(void)wwwJiancha;
 
 @end

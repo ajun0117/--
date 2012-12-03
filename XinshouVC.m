@@ -42,51 +42,59 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [super viewDidLoad];
-    UIImageView *bgIM=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"suffix_background.png"]];
-    bgIM.frame=CGRectMake(0, 0, 320, 460);
-    [self.view addSubview:bgIM];
-    [bgIM release];
+//    UIImageView *bgIM=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"suffix_background.png"]];
+//    bgIM.frame=CGRectMake(0, 0, 320, 460);
+//    [self.view addSubview:bgIM];
+//    [bgIM release];
+//    
+//    UIImageView *topIM=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
+//    topIM.image=[UIImage imageNamed:@"top.png"];
+//    topIM.userInteractionEnabled=YES;
+//    [self.view addSubview:topIM];
+//    [topIM release];
+//    
+//    UIButton *fanhuiBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+//    fanhuiBtn.frame=CGRectMake(5, 5, 50, 30);
+//    [fanhuiBtn setBackgroundImage:[UIImage imageNamed:@"返回按钮.png"] forState:UIControlStateNormal];
+//    fanhuiBtn.titleLabel.font=[UIFont systemFontOfSize:13];
+//    [fanhuiBtn setTitle:@"返回" forState:UIControlStateNormal];
+//    [fanhuiBtn addTarget:self action:@selector(fanhui) forControlEvents:UIControlEventTouchUpInside];
+//    [topIM addSubview:fanhuiBtn];
+//    
+//    UILabel *label=[[UILabel alloc]initWithFrame:CGRectMake(0, 0, 100, 30)];
+//    label.center=topIM.center;
+//    label.backgroundColor=[UIColor clearColor];
+//    label.textColor=[UIColor whiteColor];
+//    label.textAlignment=UITextAlignmentCenter;
+//    label.font=[UIFont boldSystemFontOfSize:18];
+//    label.text=@"新手指南";
+//    [topIM addSubview:label];
+//    [label release];
     
-    UIImageView *topIM=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
-    topIM.image=[UIImage imageNamed:@"top.png"];
-    topIM.userInteractionEnabled=YES;
-    [self.view addSubview:topIM];
-    [topIM release];
-    
-    UIButton *fanhuiBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    fanhuiBtn.frame=CGRectMake(5, 5, 50, 30);
-    [fanhuiBtn setBackgroundImage:[UIImage imageNamed:@"返回按钮.png"] forState:UIControlStateNormal];
-    fanhuiBtn.titleLabel.font=[UIFont systemFontOfSize:13];
-    [fanhuiBtn setTitle:@"返回" forState:UIControlStateNormal];
-    [fanhuiBtn addTarget:self action:@selector(fanhui) forControlEvents:UIControlEventTouchUpInside];
-    [topIM addSubview:fanhuiBtn];
-    
-    UILabel *label=[[UILabel alloc]initWithFrame:CGRectMake(0, 0, 100, 30)];
-    label.center=topIM.center;
-    label.backgroundColor=[UIColor clearColor];
-    label.textColor=[UIColor whiteColor];
-    label.textAlignment=UITextAlignmentCenter;
-    label.font=[UIFont boldSystemFontOfSize:18];
-    label.text=@"新手指南";
-    [topIM addSubview:label];
-    [label release];
-    
-    UIScrollView *scrollV=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 44, 320, 460-44)];
+    UIScrollView *scrollV=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, 320, 460)];
     scrollV.delegate=self;
     scrollV.pagingEnabled=YES;
-    scrollV.contentSize=CGSizeMake(320*6, 460-44);
+    scrollV.contentSize=CGSizeMake(320*6, 460);
     [self.view addSubview:scrollV];
     [scrollV release];
     
+    
+    
     for (int i=0; i<6; i++) {
-        UIImageView *im=[[UIImageView alloc]initWithFrame:CGRectMake(320*i, 0, 320, 460-44)];
+        UIImageView *im=[[UIImageView alloc]initWithFrame:CGRectMake(320*i, 0, 320, 460)];
         im.image=[UIImage imageNamed:[NSString stringWithFormat:@"fu%d",i+1]];
+        im.tag=i+1;
         [scrollV addSubview:im];
         [im release];
     }
+    UIImageView *im=(UIImageView *)[scrollV viewWithTag:6];
+    im.userInteractionEnabled=YES;
+    UIButton *button=[UIButton buttonWithType:UIButtonTypeCustom];
+    button.frame=CGRectMake(110, 320, 130, 60);
+    [button addTarget:self action:@selector(kaishiTiyan) forControlEvents:UIControlEventTouchUpInside];
+    [im addSubview:button];
     
-    self.page=[[UIPageControl alloc]initWithFrame:CGRectMake(100, 400, 120, 20)];
+    self.page=[[UIPageControl alloc]initWithFrame:CGRectMake(100, 430, 120, 20)];
     page.currentPage=0;
     page.numberOfPages=6;
     [self.view addSubview:page];
@@ -98,8 +106,7 @@
     page.currentPage=scrollView.contentOffset.x/320;
 }
 
-
--(void)fanhui{
+-(void)kaishiTiyan{
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -112,6 +119,7 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    page=nil;
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }

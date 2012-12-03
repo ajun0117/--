@@ -10,6 +10,7 @@
 #import "ChaxunVC.h"
 #import "HouzhuiListVC.h"
 #import "JSON.h"
+#import "SHKActivityIndicator.h"
 #define ENGLISH @"最多可搜索十个域名,每行输入一个,如:\ntabobao\nsina\nbbboo"
 #define CHINA @"最多可搜索十个域名,每行输入一个,如:\n淘宝.com\n新浪.com\n中国.com"
 
@@ -127,17 +128,6 @@
     searchV.text=ENGLISH;
     [searchV release];
     
-//    self.placeL=[[UILabel alloc]initWithFrame:CGRectMake(5, 5, 280, 50)];//添加显示提示文字的Lable
-//    placeL.textColor=[UIColor grayColor];
-//    placeL.backgroundColor=[UIColor clearColor];
-//    placeL.text=@"最多可搜索十个域名,每行输入一个,如:\ntabobao\nsina\nbbboo";
-//    placeL.font=[UIFont systemFontOfSize:12];
-//    placeL.lineBreakMode=UILineBreakModeWordWrap;
-//    placeL.numberOfLines=0;
-//
-//    [searchV addSubview:placeL];
-//    [placeL release];
-    
     UIButton *houBtn=[UIButton buttonWithType:UIButtonTypeCustom];
     houBtn.frame=CGRectMake(20, 44+40+120, 80, 20);
     houBtn.titleLabel.font=[UIFont systemFontOfSize:12];
@@ -175,9 +165,9 @@
             [im removeFromSuperview];
         }
     }
-            for (int i=0; i<[lineArray count]; i++) {//根据数组元素个数来重新划线
-                [self addTheLine:CGRectMake(0, 20+15*i, 280, 1)];
-            }
+    for (int i=0; i<[lineArray count]; i++) {//根据数组元素个数来重新划线
+        [self addTheLine:CGRectMake(0, 20+15*i, 280, 1)];
+    }
     if ([theText isEqualToString:@""]) {//当文本为空时 删除所有的横线
         for (UIView *im in searchV.subviews) {
             if ([im isKindOfClass:[UIImageView class]]) {
@@ -241,6 +231,7 @@
 -(void)startChaxun{
     [searchV resignFirstResponder];
     resultTableView.hidden=NO;
+    [[SHKActivityIndicator currentIndicator]displayActivity:@"多域名查询中..."];
     NSMutableArray *array=[NSMutableArray array];
     for (NSString *str in selectedArray) {
         NSString *wanzhengStr=[NSString stringWithFormat:@"%@%@",searchV.text,str];
@@ -276,6 +267,7 @@
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{
+    [[SHKActivityIndicator currentIndicator]hideAfterDelay:0.5];
     NSLog(@"receiveData-------------%@",receiveData);
     NSString *receiveStr=[[NSString alloc]initWithData:receiveData encoding:NSUTF8StringEncoding];
     NSDictionary *dic=[receiveStr JSONValue];
@@ -324,9 +316,30 @@
     [self.navigationController pushViewController:chaVC animated:YES];
 }
 
+-(void)dealloc{
+    [englishBtn release];
+    [chinaBtn release];
+    [searchV release];
+    [placeL release];
+    [selectedArray release];
+    [receiveData release];
+    [resultArray release];
+    [resultTableView release];
+    [super dealloc];
+}
+
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    englishBtn=nil;
+    chinaBtn=nil;
+    searchV=nil;
+    placeL=nil;
+    selectedArray=nil;//选择的后缀列表
+    receiveData=nil;
+    resultArray=nil;
+    resultTableView=nil;
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }

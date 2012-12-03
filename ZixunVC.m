@@ -10,6 +10,7 @@
 #import "MD5.h"
 #import "JSON.h"
 #import "ZixunXiangqingVC.h"
+#import "SHKActivityIndicator.h"
 
 @implementation ZixunVC
 @synthesize zuixinTableView;
@@ -105,9 +106,9 @@
     [myScrollV addSubview:zuixinTableView];
     [zuixinTableView release];
     if (page0==0) {
+        [[SHKActivityIndicator currentIndicator]displayActivity:@"正在请求数据..."];
         [zuixinTableView launchRefreshing];
     }
-    
     self.hangyeTableView=[[PullingRefreshTableView alloc]initWithFrame:CGRectMake(320, 0, 320, 460-44-30) pullingDelegate:self];
     hangyeTableView.delegate=self;
     hangyeTableView.dataSource=self;
@@ -216,30 +217,43 @@
 }
 - (void)pullingTableViewDidStartLoading:(PullingRefreshTableView *)tableView
 {
-    if (tableView==zuixinTableView) {
-        page0++;
-        refreshing=YES;
-        [self loadData:page0 andType:@"updated"]; 
-    }
-    else if (tableView==hangyeTableView) {
-        page1++;
-        refreshing=YES;
-        [self loadData:page1 andType:@"industry"]; 
-    }
-    else if (tableView==yingyongTableView) {
-        page2++;
-        refreshing=YES;
-        [self loadData:page2 andType:@"application"]; 
-    }
-    else if (tableView==jiazhiTableView) {
-        page3++;
-        refreshing=YES;
-        [self loadData:page3 andType:@"value"]; 
-    }
-    else if (tableView==anquanTableView) {
-        page4++;
-        refreshing=YES;
-        [self loadData:page4 andType:@"security"]; 
+     [[SHKActivityIndicator currentIndicator]displayActivity:@"正在加载更多信息..."];
+    [self performSelector:@selector(jiazaiGengduo) withObject:nil afterDelay:1.f];
+}
+
+-(void)jiazaiGengduo{
+    switch (seg.selectedSegmentIndex) {
+        case 0:{
+            page0++;
+            refreshing=YES;
+            [self loadData:page0 andType:@"updated"]; 
+            break;}
+            
+        case 1:{
+            page1++;
+            refreshing=YES;
+            [self loadData:page1 andType:@"industry"];  
+            break;}
+            
+        case 2:{
+            page2++;
+            refreshing=YES;
+            [self loadData:page2 andType:@"application"];
+            break;}
+            
+        case 3:{
+            page3++;
+            refreshing=YES;
+            [self loadData:page3 andType:@"value"]; 
+            break;}
+            
+        case 4:{
+            page4++;
+            refreshing=YES;
+            [self loadData:page4 andType:@"security"]; 
+            break;}
+        default:
+            break;
     }
 }
 
@@ -257,7 +271,6 @@
                             @"hello",@"appid",
                             @"111111",@"appkey",nil];
     [self jiazaiMore:params];
-    NSLog(@"上提咯~");
 }
 
 -(void)jiazaiMore:(NSDictionary *)params
@@ -313,6 +326,7 @@
     NSDictionary *dic=[receiveStr JSONValue];
     NSLog(@"%@",dic);
     [lineArray addObjectsFromArray:[dic objectForKey:@"list"]];
+    [[SHKActivityIndicator currentIndicator]hideAfterDelay:0.5];
     switch (seg.selectedSegmentIndex) {
         case 0:{
             refreshing=NO;
@@ -490,6 +504,7 @@
 }
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
+    [[SHKActivityIndicator currentIndicator]hideAfterDelay:0.5];
     NSMutableString *receiveStr = [[NSMutableString alloc]
                                    initWithData:self.receiveData encoding:NSUTF8StringEncoding];
     NSRange ra;
@@ -658,12 +673,23 @@
     [yingyongTableView release];
     [jiazhiTableView release];
     [anquanTableView release];
+    [receiveData release];
+    [lineArray release];
+    [myScrollV release];
     [super dealloc];
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    zuixinTableView=nil;
+    hangyeTableView=nil;
+    yingyongTableView=nil;
+    jiazhiTableView=nil;
+    anquanTableView=nil;
+    myScrollV=nil;
+    lineArray=nil;
+    receiveData=nil;
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }

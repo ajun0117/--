@@ -225,6 +225,9 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    listArray=nil;
+    listTableView=nil;
+    zhuangtaiDic=nil;
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }

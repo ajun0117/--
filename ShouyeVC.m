@@ -100,13 +100,15 @@
 - (void)dealloc
 {
     [myIcarousel release];
+    [page release];
     [super dealloc];
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    self.myIcarousel = nil;
+    myIcarousel = nil;
+    page=nil;
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }

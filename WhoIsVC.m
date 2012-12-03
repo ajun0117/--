@@ -8,6 +8,7 @@
 
 #import "WhoIsVC.h"
 #import "JSON.h"
+#import "SHKActivityIndicator.h"
 #define LIST @"域名",@"注册人姓名",@"注册人单位",@"注册商",@"域名状态",@"域名注册日期",@"域名到期时间",@"DNS服务器",@"注册人电子邮箱",@"注册人地址",@"注册人电话",@"传真"
 
 @implementation WhoIsVC
@@ -114,6 +115,7 @@
 }
 
 -(void)searWhoIs{
+    [[SHKActivityIndicator currentIndicator]displayActivity:@"WhoIs查询中..."];
     NSLog(@"nameStr-----------%@",nameStr);
     NSString *encodeStr=[self.nameStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];//进行编码
     NSDictionary *dic=[NSDictionary dictionaryWithObjectsAndKeys:encodeStr,@"domainname", nil];//这里是domainname 注意！！！
@@ -145,6 +147,7 @@
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{
+    [[SHKActivityIndicator currentIndicator]hideAfterDelay:0.5];
     NSLog(@"receiveData-------------%@",receiveData);
     NSString *receiveStr=[[NSString alloc]initWithData:receiveData encoding:NSUTF8StringEncoding];
     NSDictionary *dic=[receiveStr JSONValue];
@@ -266,9 +269,33 @@
     
 }
 
+-(void)dealloc{
+    [nameStr release];
+    [resultDic release];
+    [resultTableView release];
+    [receiveData release];
+    [xiangBtn release];
+    [picArray release];
+    [XinxiArray release];
+    [nameArray release];
+    [wZTableView release];
+    [wzStr release];
+    [super dealloc];
+}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    nameStr=nil;
+    resultTableView=nil;
+    resultDic=nil;
+    receiveData=nil;
+    xiangBtn=nil;
+    picArray=nil;
+    XinxiArray=nil;
+    nameArray=nil;
+    wZTableView=nil;
+    wzStr=nil;
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }

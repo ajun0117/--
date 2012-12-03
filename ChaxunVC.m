@@ -10,6 +10,7 @@
 #import "MoreChaxunVC.h"
 #import "JSON.h"
 #import "WhoIsVC.h"
+#import "SHKActivityIndicator.h"
 
 @implementation ChaxunVC
 @synthesize searTextF;
@@ -318,6 +319,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (tableView==listTableView) {
+        [[SHKActivityIndicator currentIndicator]displayActivity:@"单域名查询中..."];
     listTableView.frame=CGRectMake(0, 120-460, 320, 460-120);
     resultTableView.hidden=NO;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -355,6 +357,7 @@
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{
+    [[SHKActivityIndicator currentIndicator]hideAfterDelay:0.5];
     NSLog(@"receiveData-------------%@",receiveData);
     NSString *receiveStr=[[NSString alloc]initWithData:receiveData encoding:NSUTF8StringEncoding];
     NSDictionary *dic=[receiveStr JSONValue];
@@ -378,6 +381,9 @@
     [searTextF resignFirstResponder];
     listTableView.frame=CGRectMake(0, 120-460, 320, 460-120);
     resultTableView.hidden=NO;
+    
+    [[SHKActivityIndicator currentIndicator]displayActivity:@"正在请求中..." inView:self.view];
+    
     NSString *encodeStr=[searTextF.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];//进行编码
     NSDictionary *dic=[NSDictionary dictionaryWithObjectsAndKeys:encodeStr,@"domainnames", nil];
     NSLog(@"dic----%@",dic);
@@ -419,12 +425,22 @@
     [listTableView release];
     [receiveData release];
     [resultTableView release];
+    [resultArray release];
     [super dealloc];
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    searTextF=nil;
+    englishBtn=nil;
+    chinaBtn=nil;
+    listTableView=nil;
+    englishH=nil;
+    chinaH=nil;
+    receiveData=nil;
+    resultTableView=nil;
+    resultArray=nil;
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }

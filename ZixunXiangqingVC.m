@@ -169,10 +169,24 @@
     [webV loadHTMLString:contentStr baseURL:url1];
 }
 
+-(void)dealloc{
+    [webV release];
+    [titleL release];
+    [numStr release];
+    [urlS release];
+    [contentStr release];
+    [super dealloc];
+}
+
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    webV=nil;
+    titleL=nil;
+    numStr=nil;
+    urlS=nil;
+    contentStr=nil;
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
