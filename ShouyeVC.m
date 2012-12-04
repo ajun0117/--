@@ -124,7 +124,7 @@
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index
 {
     UIView *view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:[imageArray objectAtIndex:index]]] autorelease];
-    view.frame = CGRectMake(10, 80, 100, 100);
+    view.frame = CGRectMake(10, 80, 110, 110);
     return view;
 }
 

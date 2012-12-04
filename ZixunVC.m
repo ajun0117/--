@@ -16,7 +16,7 @@
 @synthesize zuixinTableView;
 @synthesize hangyeTableView,yingyongTableView,jiazhiTableView,anquanTableView;
 @synthesize receiveData;
-@synthesize lineArray;
+@synthesize zuixinArray,hangyeArray,yingyongArray,jiazhiArray,anquanArray;
 @synthesize myScrollV;
 @synthesize seg;
 
@@ -25,7 +25,11 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        self.lineArray=[NSMutableArray array];
+        self.zuixinArray=[NSMutableArray array];
+        self.hangyeArray=[NSMutableArray array];
+        self.yingyongArray=[NSMutableArray array];
+        self.jiazhiArray=[NSMutableArray array];
+        self.anquanArray=[NSMutableArray array];
     }
     return self;
 }
@@ -52,11 +56,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    page0=0;
-    page1=0;
-    page2=0;
-    page3=0;
-    page4=0;
+    page0=1;
+    page1=1;
+    page2=1;
+    page3=1;
+    page4=1;
+    isZXfirst=YES;
+    isHYfirst=YES;
+    isYYfirst=YES;
+    isJZfirst=YES;
+    isAQfirst=YES;
     UIImageView *topIM=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
     topIM.image=[UIImage imageNamed:@"top.png"];
     topIM.userInteractionEnabled=YES;
@@ -84,9 +93,9 @@
     self.seg=[[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"最新",@"行业",@"应用",@"价值",@"安全",nil]];
     seg.segmentedControlStyle=UISegmentedControlStyleBar;//此类型实现点击后图片大小完全填充按钮
     seg.frame=CGRectMake(0, 44, 320, 30);
-    [seg setBackgroundImage:[UIImage imageNamed:@"按钮.png"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    [seg setBackgroundImage:[UIImage imageNamed:@"按下.png"] forState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
-    [seg setTitleTextAttributes:[NSDictionary dictionaryWithObject:[UIColor blackColor] forKey:UITextAttributeTextColor] forState:UIControlStateNormal];
+//    [seg setBackgroundImage:[UIImage imageNamed:@"按钮.png"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+//    [seg setBackgroundImage:[UIImage imageNamed:@"按下.png"] forState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
+//    [seg setTitleTextAttributes:[NSDictionary dictionaryWithObject:[UIColor blackColor] forKey:UITextAttributeTextColor] forState:UIControlStateNormal];
     seg.selectedSegmentIndex=0;
     [seg addTarget:self action:@selector(segmentedControl:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:seg];
@@ -105,10 +114,7 @@
     zuixinTableView.dataSource=self;
     [myScrollV addSubview:zuixinTableView];
     [zuixinTableView release];
-    if (page0==0) {
-        [[SHKActivityIndicator currentIndicator]displayActivity:@"正在请求数据..."];
-        [zuixinTableView launchRefreshing];
-    }
+    
     self.hangyeTableView=[[PullingRefreshTableView alloc]initWithFrame:CGRectMake(320, 0, 320, 460-44-30) pullingDelegate:self];
     hangyeTableView.delegate=self;
     hangyeTableView.dataSource=self;
@@ -133,6 +139,11 @@
     [myScrollV addSubview:anquanTableView];
     [anquanTableView release];
     
+//    if (page0==0) {
+//        [[SHKActivityIndicator currentIndicator]displayActivity:@"正在请求数据..."];
+//        [zuixinTableView launchRefreshing];
+//    }
+    [self segmentedControl:seg];
 }
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
@@ -167,6 +178,7 @@
             default:
                 break;
         }
+        [self segmentedControl:seg];
     }
 }
 
@@ -212,8 +224,7 @@
 #pragma mark - PullingRefreshTableViewDelegate
 - (void)pullingTableViewDidStartRefreshing:(PullingRefreshTableView *)tableView
 {
-    refreshing = YES;
-    [self performSelector:@selector(segmentedControl:) withObject:nil afterDelay:1.f];
+    [self performSelector:@selector(refrash) withObject:nil afterDelay:1.f];
 }
 - (void)pullingTableViewDidStartLoading:(PullingRefreshTableView *)tableView
 {
@@ -225,82 +236,59 @@
     switch (seg.selectedSegmentIndex) {
         case 0:{
             page0++;
-            refreshing=YES;
-            [self loadData:page0 andType:@"updated"]; 
+//            refreshing=YES;
+            NSString *pageStr=[NSString stringWithFormat:@"%d",page0];
+            NSDictionary *params=[self getTheParamsWithPage:pageStr andType:@"updated"]; 
+            NSMutableString *paramsStr=[self jiamiAndpaixu:params];//先进行加密和排序
+            [self jiazaiMore:paramsStr];
             break;}
             
         case 1:{
             page1++;
-            refreshing=YES;
-            [self loadData:page1 andType:@"industry"];  
+//            refreshing=YES;
+            NSString *pageStr=[NSString stringWithFormat:@"%d",page1];
+            NSDictionary *params=[self getTheParamsWithPage:pageStr andType:@"industry"]; 
+            NSMutableString *paramsStr=[self jiamiAndpaixu:params];//先进行加密和排序
+            [self jiazaiMore:paramsStr];
+//            [self loadData:page1 andType:@"industry"];  
             break;}
             
         case 2:{
             page2++;
-            refreshing=YES;
-            [self loadData:page2 andType:@"application"];
+//            refreshing=YES;
+            NSString *pageStr=[NSString stringWithFormat:@"%d",page2];
+            NSDictionary *params=[self getTheParamsWithPage:pageStr andType:@"application"]; 
+            NSMutableString *paramsStr=[self jiamiAndpaixu:params];//先进行加密和排序
+            [self jiazaiMore:paramsStr];
+//            [self loadData:page2 andType:@"application"];
             break;}
             
         case 3:{
             page3++;
-            refreshing=YES;
-            [self loadData:page3 andType:@"value"]; 
+//            refreshing=YES;
+            NSString *pageStr=[NSString stringWithFormat:@"%d",page3];
+            NSDictionary *params=[self getTheParamsWithPage:pageStr andType:@"value"]; 
+            NSMutableString *paramsStr=[self jiamiAndpaixu:params];//先进行加密和排序
+            [self jiazaiMore:paramsStr];
+//            [self loadData:page3 andType:@"value"]; 
             break;}
             
         case 4:{
             page4++;
-            refreshing=YES;
-            [self loadData:page4 andType:@"security"]; 
+//            refreshing=YES;
+            NSString *pageStr=[NSString stringWithFormat:@"%d",page4];
+            NSDictionary *params=[self getTheParamsWithPage:pageStr andType:@"security"]; 
+            NSMutableString *paramsStr=[self jiamiAndpaixu:params];//先进行加密和排序
+            [self jiazaiMore:paramsStr];
+//            [self loadData:page4 andType:@"security"]; 
             break;}
         default:
             break;
     }
 }
 
--(void)loadData:(NSInteger)page andType:(NSString *)type{
-    NSLog(@"page------%d",page);
-    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
-                            @"1.0",@"ver",
-                            @"ios",@"client",
-                            @"list",@"method",
-                            @"news",@"module",
-                            type,@"type",
-                            [NSString stringWithFormat:@"%d",page+1],@"pageIndex",
-                            @"20",@"pageSize",
-                            [self timestamp],@"timestamp",
-                            @"hello",@"appid",
-                            @"111111",@"appkey",nil];
-    [self jiazaiMore:params];
-}
-
--(void)jiazaiMore:(NSDictionary *)params
+-(void)jiazaiMore:(NSMutableString *)paramsStr
 {
-    //参数按⾸首字⺟母排序
-    NSArray *array = [[params allKeys]
-                      sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-    NSLog(@"%@",array);
-    //按照参数排序后的顺序,将其对应的value,进⾏字符串拼接
-    NSMutableString *signStr = [[NSMutableString alloc] init]; for (int i = 0; i < [array count]; i++) {
-        NSString *key = [array objectAtIndex:i]; //从排序好的参数数组中,取得key
-        NSString *value = [params valueForKey:key]; //从做好的参数字典中,通过 key,取得对应的value
-        [signStr insertString:value atIndex:signStr.length]; //将取出的 value,加到字符串里面
-    }
-    NSLog(@"%@",signStr);
-    //将做好的字符串进行MD5加密 
-    NSString *sign = [MD5 md5Digest:signStr];
-    //将所有的参数和值进⾏行最后的拼接,使⽤用"&"连接 
-    NSArray *keys = [params allKeys]; NSArray *values = [params allValues];
-    NSMutableString *paramsStr = [[NSMutableString alloc] init];
-    for (int i = 0; i < [keys count]; i++) {
-        NSString *key = [keys objectAtIndex:i];
-        NSString *value = [values objectAtIndex:i];
-        [paramsStr appendString:key];
-        [paramsStr appendString:@"="];
-        [paramsStr appendString:value];
-        [paramsStr appendString:@"&"];
-    }
-    [paramsStr appendFormat:@"sign=%@",sign];
-    NSLog(@"%@",paramsStr);
     NSString *urlStr = [NSString stringWithFormat:@"http://zixun.www.net.cn/api/hichinaapp.php?%@",paramsStr];
     NSURL *url = [NSURL URLWithString:urlStr];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
@@ -325,43 +313,52 @@
     //转化成可用字典
     NSDictionary *dic=[receiveStr JSONValue];
     NSLog(@"%@",dic);
-    [lineArray addObjectsFromArray:[dic objectForKey:@"list"]];
     [[SHKActivityIndicator currentIndicator]hideAfterDelay:0.5];
     switch (seg.selectedSegmentIndex) {
         case 0:{
-            refreshing=NO;
+            [zuixinArray addObjectsFromArray:[dic objectForKey:@"list"]];
+//            refreshing=NO;
             [zuixinTableView tableViewDidFinishedLoading];
             [zuixinTableView reloadData];
             break;}
         case 1:{
-            refreshing=NO;
+            [hangyeArray addObjectsFromArray:[dic objectForKey:@"list"]];
+//            refreshing=NO;
             [hangyeTableView tableViewDidFinishedLoading];
             [hangyeTableView reloadData];
             break;}
         case 2:{
-            refreshing=NO;
+//            refreshing=NO;
+            [yingyongArray addObjectsFromArray:[dic objectForKey:@"list"]];
             [yingyongTableView tableViewDidFinishedLoading];
             [yingyongTableView reloadData];
             break;}
         case 3:{
-            refreshing=NO;
+//            refreshing=NO;
+            [jiazhiArray addObjectsFromArray:[dic objectForKey:@"list"]];
             [jiazhiTableView tableViewDidFinishedLoading];
             [jiazhiTableView reloadData];
             break;}
         case 4:{
-            refreshing=NO;
+//            refreshing=NO;
+            [anquanArray addObjectsFromArray:[dic objectForKey:@"list"]];
             [anquanTableView tableViewDidFinishedLoading];
             [anquanTableView reloadData];
             break;}
-            
         default:
             break;
     }
 }
 
 
--(void)jiamiAndQingqiu:(NSDictionary *)params//用于加密并且发起请求
+-(void)sendQingqiu:(NSMutableString *)paramsStr//发起请求
 {
+    NSString *urlStr = [NSString stringWithFormat:@"http://zixun.www.net.cn/api/hichinaapp.php?%@",paramsStr];
+    NSURL *url = [NSURL URLWithString:urlStr];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    [NSURLConnection connectionWithRequest:request delegate:self];
+}
+-(NSMutableString *)jiamiAndpaixu:(NSDictionary *)params{//用于加密和排序
     //参数按⾸首字⺟母排序
     NSArray *array = [[params allKeys]
                       sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
@@ -388,10 +385,7 @@
     }
     [paramsStr appendFormat:@"sign=%@",sign];
     NSLog(@"%@",paramsStr);
-    NSString *urlStr = [NSString stringWithFormat:@"http://zixun.www.net.cn/api/hichinaapp.php?%@",paramsStr];
-    NSURL *url = [NSURL URLWithString:urlStr];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    [NSURLConnection connectionWithRequest:request delegate:self];
+    return paramsStr;
 }
 
 
@@ -400,92 +394,136 @@
         case 0:{
             //请求最新资讯
             [myScrollV setContentOffset:CGPointMake(0, 0) animated:YES];
-            NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    @"1.0",@"ver",
-                                    @"ios",@"client",
-                                    @"list",@"method",
-                                    @"news",@"module",
-                                    @"updated",@"type",
-                                    @"1",@"pageIndex",
-                                    @"20",@"pageSize",
-                                    [self timestamp],@"timestamp",
-                                    @"hello",@"appid",
-                                    @"111111",@"appkey",nil];
-            [self jiamiAndQingqiu:params];
+             if (isZXfirst) {
+                 [[SHKActivityIndicator currentIndicator]displayActivity:@"正在加载中..."];
+            NSDictionary *params=[self getTheParamsWithPage:@"1" andType:@"updated"];
+            NSMutableString *paramsStr=[self jiamiAndpaixu:params];//先进行加密和排序
+            [self sendQingqiu:paramsStr];//发异步请求
+                 isZXfirst=NO;
+             }
             break;
         }
         case 1:{
             //请求行业资讯
              [myScrollV setContentOffset:CGPointMake(320, 0) animated:YES];
-            NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    @"1.0",@"ver",
-                                    @"ios",@"client",
-                                    @"list",@"method",
-                                    @"news",@"module",
-                                    @"industry",@"type",
-                                    @"1",@"pageIndex",
-                                    @"20",@"pageSize",
-                                    [self timestamp],@"timestamp",
-                                    @"hello",@"appid",
-                                    @"111111",@"appkey",nil];
-            [self jiamiAndQingqiu:params];
+             if (isHYfirst) {
+                 [[SHKActivityIndicator currentIndicator]displayActivity:@"正在加载中..."];
+            NSDictionary *params=[self getTheParamsWithPage:@"1" andType:@"industry"];
+            NSMutableString *paramsStr=[self jiamiAndpaixu:params];//先进行加密和排序
+            [self sendQingqiu:paramsStr];//发异步请求
+                 isHYfirst=NO;
+             }
             break;
         }
         case 2:{
             //请求应用资讯
             [myScrollV setContentOffset:CGPointMake(640, 0) animated:YES];
-            NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    @"1.0",@"ver",
-                                    @"ios",@"client",
-                                    @"list",@"method",
-                                    @"news",@"module",
-                                    @"application",@"type",
-                                    @"1",@"pageIndex",
-                                    @"20",@"pageSize",
-                                    [self timestamp],@"timestamp",
-                                    @"hello",@"appid",
-                                    @"111111",@"appkey",nil];
-            [self jiamiAndQingqiu:params];
+             if (isYYfirst) {
+                 [[SHKActivityIndicator currentIndicator]displayActivity:@"正在加载中..."];
+            NSDictionary *params=[self getTheParamsWithPage:@"1" andType:@"application"];
+            NSMutableString *paramsStr=[self jiamiAndpaixu:params];//先进行加密和排序
+            [self sendQingqiu:paramsStr];//发异步请求
+                 isYYfirst=NO;
+             }
             break;
         }
         case 3:{
             //请求价值资讯
             [myScrollV setContentOffset:CGPointMake(960, 0) animated:YES];
-            NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    @"1.0",@"ver",
-                                    @"ios",@"client",
-                                    @"list",@"method",
-                                    @"news",@"module",
-                                    @"value",@"type",
-                                    @"1",@"pageIndex",
-                                    @"20",@"pageSize",
-                                    [self timestamp],@"timestamp",
-                                    @"hello",@"appid",
-                                    @"111111",@"appkey",nil];
-            [self jiamiAndQingqiu:params];
+             if (isJZfirst) {
+                 [[SHKActivityIndicator currentIndicator]displayActivity:@"正在加载中..."];
+            NSDictionary *params=[self getTheParamsWithPage:@"1" andType:@"value"];
+            NSMutableString *paramsStr=[self jiamiAndpaixu:params];//先进行加密和排序
+            [self sendQingqiu:paramsStr];//发异步请求
+                 isJZfirst=NO;
+             }
             break;
         } 
         case 4:{
             //请求安全资讯
             [myScrollV setContentOffset:CGPointMake(1280, 0) animated:YES];
-            NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    @"1.0",@"ver",
-                                    @"ios",@"client",
-                                    @"list",@"method",
-                                    @"news",@"module",
-                                    @"security",@"type",
-                                    @"1",@"pageIndex",
-                                    @"20",@"pageSize",
-                                    [self timestamp],@"timestamp",
-                                    @"hello",@"appid",
-                                    @"111111",@"appkey",nil];
-            [self jiamiAndQingqiu:params];
+             if (isAQfirst) {
+                 [[SHKActivityIndicator currentIndicator]displayActivity:@"正在加载中..."];
+            NSDictionary *params=[self getTheParamsWithPage:@"1" andType:@"security"];
+            NSMutableString *paramsStr=[self jiamiAndpaixu:params];//先进行加密和排序
+            [self sendQingqiu:paramsStr];//发异步请求
+                 isAQfirst=NO;
+             }
             break;
         }
         default:
             break;
     }
 }
+
+-(void)refrash{
+    switch (seg.selectedSegmentIndex) {
+        case 0:{
+            //请求最新资讯
+                [[SHKActivityIndicator currentIndicator]displayActivity:@"正在加载中..."];
+                NSDictionary *params=[self getTheParamsWithPage:@"1" andType:@"updated"];
+                NSMutableString *paramsStr=[self jiamiAndpaixu:params];//先进行加密和排序
+                [self sendQingqiu:paramsStr];//发异步请求
+                isZXfirst=NO;
+            break;
+        }
+        case 1:{
+            //请求行业资讯
+                [[SHKActivityIndicator currentIndicator]displayActivity:@"正在加载中..."];
+                NSDictionary *params=[self getTheParamsWithPage:@"1" andType:@"industry"];
+                NSMutableString *paramsStr=[self jiamiAndpaixu:params];//先进行加密和排序
+                [self sendQingqiu:paramsStr];//发异步请求
+                isHYfirst=NO;
+            break;
+        }
+        case 2:{
+            //请求应用资讯
+                [[SHKActivityIndicator currentIndicator]displayActivity:@"正在加载中..."];
+                NSDictionary *params=[self getTheParamsWithPage:@"1" andType:@"application"];
+                NSMutableString *paramsStr=[self jiamiAndpaixu:params];//先进行加密和排序
+                [self sendQingqiu:paramsStr];//发异步请求
+                isYYfirst=NO;
+            break;
+        }
+        case 3:{
+            //请求价值资讯
+                [[SHKActivityIndicator currentIndicator]displayActivity:@"正在加载中..."];
+                NSDictionary *params=[self getTheParamsWithPage:@"1" andType:@"value"];
+                NSMutableString *paramsStr=[self jiamiAndpaixu:params];//先进行加密和排序
+                [self sendQingqiu:paramsStr];//发异步请求
+                isJZfirst=NO;
+            break;
+        } 
+        case 4:{
+            //请求安全资讯
+                [[SHKActivityIndicator currentIndicator]displayActivity:@"正在加载中..."];
+                NSDictionary *params=[self getTheParamsWithPage:@"1" andType:@"security"];
+                NSMutableString *paramsStr=[self jiamiAndpaixu:params];//先进行加密和排序
+                [self sendQingqiu:paramsStr];//发异步请求
+                isAQfirst=NO;
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+
+-(NSDictionary *)getTheParamsWithPage:(NSString *)pageStr andType:(NSString *)type{
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            @"1.0",@"ver",
+                            @"ios",@"client",
+                            @"list",@"method",
+                            @"news",@"module",
+                            type,@"type",
+                            pageStr,@"pageIndex",
+                            @"20",@"pageSize",
+                            [self timestamp],@"timestamp",
+                            @"hello",@"appid",
+                            @"111111",@"appkey",nil];
+    return params;
+}
+
 
 -(NSString *)timestamp{
     NSString *timeStr=[NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
@@ -524,35 +562,44 @@
     //转化成可用字典
     NSDictionary *dic=[receiveStr JSONValue];
     NSLog(@"%@",dic);
-    [lineArray removeAllObjects];
-    [lineArray addObjectsFromArray:[dic objectForKey:@"list"]];
+    
     switch (seg.selectedSegmentIndex) {
         case 0:{
-            refreshing=NO;
+            [zuixinArray removeAllObjects];
+            [zuixinArray addObjectsFromArray:[dic objectForKey:@"list"]];
+//            refreshing=NO;
             [zuixinTableView tableViewDidFinishedLoading];
             [zuixinTableView reloadData];
             break;}
             
         case 1:{
-            refreshing=NO;
+            [hangyeArray removeAllObjects];
+            [hangyeArray addObjectsFromArray:[dic objectForKey:@"list"]];
+//            refreshing=NO;
             [hangyeTableView tableViewDidFinishedLoading];
             [hangyeTableView reloadData];
             break;}
             
         case 2:{
-            refreshing=NO;
+            [yingyongArray removeAllObjects];
+            [yingyongArray addObjectsFromArray:[dic objectForKey:@"list"]];
+//            refreshing=NO;
             [yingyongTableView tableViewDidFinishedLoading];
             [yingyongTableView reloadData];
             break;}
             
         case 3:{
-            refreshing=NO;
+            [jiazhiArray removeAllObjects];
+            [jiazhiArray addObjectsFromArray:[dic objectForKey:@"list"]];
+//            refreshing=NO;
             [jiazhiTableView tableViewDidFinishedLoading];
             [jiazhiTableView reloadData];
             break;}
             
         case 4:{
-            refreshing=NO;
+            [anquanArray removeAllObjects];
+            [anquanArray addObjectsFromArray:[dic objectForKey:@"list"]];
+//            refreshing=NO;
             [anquanTableView tableViewDidFinishedLoading];
             [anquanTableView reloadData];
             break;}
@@ -571,7 +618,21 @@
                                 
 #pragma mark -
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return [lineArray count];
+    if (tableView==zuixinTableView) {
+        return [zuixinArray count];
+    }
+    else if(tableView==hangyeTableView){
+        return [hangyeArray count];
+    }
+    else if(tableView==yingyongTableView){
+        return [yingyongArray count];
+    }
+    else if(tableView==jiazhiTableView){
+        return [jiazhiArray count];
+    }
+    else{
+        return [anquanArray count];
+    }
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -616,7 +677,22 @@
         [cell addSubview:timeL];
         [timeL release];
     }
-    NSDictionary *dic=[lineArray objectAtIndex:indexPath.row];
+    NSDictionary *dic;
+    if (tableView==zuixinTableView) {
+        dic=[zuixinArray objectAtIndex:indexPath.row];
+    }
+    else if(tableView==hangyeTableView){
+        dic=[hangyeArray objectAtIndex:indexPath.row];
+    }
+    else if(tableView==yingyongTableView){
+        dic=[yingyongArray objectAtIndex:indexPath.row];
+    }
+    else if(tableView==jiazhiTableView){
+       dic=[jiazhiArray objectAtIndex:indexPath.row];
+    }
+    else if(tableView==anquanTableView){
+        dic=[anquanArray objectAtIndex:indexPath.row];
+    }
     UILabel *myTextLabel=(UILabel *)[cell viewWithTag:200];
     myTextLabel.text=[dic objectForKey:@"title"];
     UILabel *myDetailTextLabel=(UILabel *)[cell viewWithTag:300];
@@ -627,31 +703,47 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSDictionary *dic=[lineArray objectAtIndex:indexPath.row];
-    NSString *num=[dic objectForKey:@"id"];
     ZixunXiangqingVC *zxxqVC=[[ZixunXiangqingVC alloc]init];
     zxxqVC.navigationController.navigationBarHidden=YES;
-    zxxqVC.numStr=num;
-    [self.navigationController pushViewController:zxxqVC animated:YES];
     switch (seg.selectedSegmentIndex) {
         case 0:{
+            NSDictionary *dic=[zuixinArray objectAtIndex:indexPath.row];
+            NSString *num=[dic objectForKey:@"id"];
+            zxxqVC.numStr=num;
+            [self.navigationController pushViewController:zxxqVC animated:YES];
             zxxqVC.titleL.text=@"最新资讯";
             break;}
             
         case 1:{
-             zxxqVC.titleL.text=@"行业资讯";
+            NSDictionary *dic=[hangyeArray objectAtIndex:indexPath.row];
+            NSString *num=[dic objectForKey:@"id"];
+            zxxqVC.numStr=num;
+            [self.navigationController pushViewController:zxxqVC animated:YES];
+            zxxqVC.titleL.text=@"行业资讯";
             break;}
             
         case 2:{
+            NSDictionary *dic=[yingyongArray objectAtIndex:indexPath.row];
+            NSString *num=[dic objectForKey:@"id"];
+            zxxqVC.numStr=num;
+            [self.navigationController pushViewController:zxxqVC animated:YES];
             zxxqVC.titleL.text=@"应用资讯";
             break;}
             
         case 3:{
-             zxxqVC.titleL.text=@"价值资讯";
+            NSDictionary *dic=[jiazhiArray objectAtIndex:indexPath.row];
+            NSString *num=[dic objectForKey:@"id"];
+            zxxqVC.numStr=num;
+            [self.navigationController pushViewController:zxxqVC animated:YES];
+            zxxqVC.titleL.text=@"价值资讯";
             break;}
             
         case 4:{
-             zxxqVC.titleL.text=@"安全资讯";
+            NSDictionary *dic=[anquanArray objectAtIndex:indexPath.row];
+            NSString *num=[dic objectForKey:@"id"];
+            zxxqVC.numStr=num;
+            [self.navigationController pushViewController:zxxqVC animated:YES];
+            zxxqVC.titleL.text=@"安全资讯";
             break;}
             
         default:
@@ -674,7 +766,11 @@
     [jiazhiTableView release];
     [anquanTableView release];
     [receiveData release];
-    [lineArray release];
+    [zuixinArray release];
+    [hangyeArray release];
+    [yingyongArray release];
+    [jiazhiArray release];
+    [anquanArray release];
     [myScrollV release];
     [super dealloc];
 }
@@ -688,7 +784,11 @@
     jiazhiTableView=nil;
     anquanTableView=nil;
     myScrollV=nil;
-    lineArray=nil;
+    zuixinArray=nil;
+    hangyeArray=nil;
+    yingyongArray=nil;
+    jiazhiArray=nil;
+    anquanArray=nil;
     receiveData=nil;
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;

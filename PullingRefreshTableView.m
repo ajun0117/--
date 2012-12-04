@@ -75,7 +75,6 @@
     } completion:^(BOOL bl){
         [self tableViewDidEndDragging:self];
     } ];
-
 }
 #pragma mark - Scroll methods
 
@@ -157,14 +156,12 @@
             [_pullingDelegate pullingTableViewDidStartLoading:self];
         }
     }
-    
 }
 - (void)tableViewDidScroll:(UIScrollView *)scrollView
 {
     if (_headerView.state == kPRStateLoading || _footerView.state == kPRStateLoading) {
         return;
     }
-    
     CGPoint offset = scrollView.contentOffset;
     CGSize size = scrollView.frame.size;
     CGSize contentSize = scrollView.contentSize;
@@ -173,10 +170,14 @@
     if (offset.y < -kPROffsetY) {   //header totally appeard
         _headerView.state = kPRStatePulling;
     } else if (offset.y > -kPROffsetY && offset.y < 0){ //header part appeared
+        NSLog(@"kPRStateNormal--kPRStateNormal--kPRStateNormal");
         _headerView.state = kPRStateNormal;
         
     } else if ( yMargin > kPROffsetY){  //footer totally appeared
+        NSLog(@"yMargin==%f",yMargin);
+        NSLog(@"kPROffsetY===%f",kPROffsetY);
         if (_footerView.state != kPRStateHitTheEnd) {
+            NSLog(@"_footerView-----------kPRStatePulling--kPRStatePulling--kPRStatePulling");
             _footerView.state = kPRStatePulling;
         }
     } else if ( yMargin < kPROffsetY && yMargin > 0) {//footer part appeared
@@ -225,7 +226,7 @@
             }
         }];
     }
-    
+    [_footerView setState:kPRStateNormal animated:NO];
 }
 /*
 // Only override drawRect: if you perform custom drawing.
@@ -252,7 +253,5 @@
         offset.y += 44.f;
         self.contentOffset = offset;
     }
-    
-    
 }
 @end

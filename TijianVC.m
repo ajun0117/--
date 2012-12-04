@@ -124,6 +124,14 @@
     [shoucangBtn addTarget:self action:@selector(toShoucangIt:) forControlEvents:UIControlEventTouchUpInside];
     [chushiMV addSubview:shoucangBtn];
     
+    self.jianshiBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+    jianshiBtn.frame=CGRectMake(220, 20, 40, 25);
+    [jianshiBtn setImage:[UIImage imageNamed:@"test_jiankong.png"] forState:UIControlStateNormal];
+    [jianshiBtn setBackgroundImage:[UIImage imageNamed:@"test_button.png"] forState:UIControlStateNormal];
+    [jianshiBtn addTarget:self action:@selector(toJianshiIt:) forControlEvents:UIControlEventTouchUpInside];
+    [chushiMV addSubview:jianshiBtn];
+    jianshiBtn.hidden=YES;
+    
     //Whois状态栏
     self.zhuangtaiMV=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"test_graybutton.png"]];
     zhuangtaiMV.userInteractionEnabled=YES;
@@ -263,7 +271,7 @@
         [request1 setPostValue:params forKey:@"req"];
 //**************************************************             
         //www访问验证请求
-        NSString *tokenS=[NSString stringWithFormat:@"%@_%@1",TOKEN,[self timestamp]];
+        NSString *tokenS=[NSString stringWithFormat:@"%@_%@2",TOKEN,[self timestamp]];
         NSDictionary *wwwparams = [NSDictionary dictionaryWithObjectsAndKeys:
                                    dic,@"data",
                                    @"1.0",@"v",tokenS,@"trid",
@@ -276,7 +284,7 @@
         [request2 setPostValue:wwwparams forKey:@"req"];
 //**************************************************             
         //未注册域名列表请求
-        NSString *tokenS3=[NSString stringWithFormat:@"%@_%@2",TOKEN,[self timestamp]];
+        NSString *tokenS3=[NSString stringWithFormat:@"%@_%@3",TOKEN,[self timestamp]];
         NSDictionary *noDomainNamePams = [NSDictionary dictionaryWithObjectsAndKeys:
                                    dic,@"data",
                                    @"1.0",@"v",tokenS3,@"trid",
@@ -315,32 +323,34 @@
         NSArray *statusArray=[[checkDic objectForKey:@"results"] objectForKey:@"domainnames"];
         NSString *statusStr=[[statusArray objectAtIndex:0] objectForKey:@"status"];
         NSLog(@"statusStr------------%@",statusStr);
-        if ([statusStr intValue]==1) {//如果次域名已被注册
-            xiaolianMV.hidden=YES;
-            firstL.frame=CGRectMake(20, 28, 200, 15);
+         if ([statusStr intValue]==0) {//如果次域名未被注册
+             xiaolianMV.image=[UIImage imageNamed:@"smile.png"];
+             buyBtn.hidden=NO;
+             shoucangBtn.hidden=NO;
+             jianshiBtn.hidden=YES;
+             firstL.frame=CGRectMake(60, 28, 200, 15);
+            firstL.text=@"恭喜你！此域名未被注册";
+        }
+            else{
+            xiaolianMV.image=[UIImage imageNamed:@"face14.png"];
             firstL.text=@"此域名已注册，体检情况如下";
-            self.buyBtn.hidden=YES;
-            self.shoucangBtn.hidden=YES;
-            self.jianshiBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-            jianshiBtn.frame=CGRectMake(220, 20, 40, 25);
-            [jianshiBtn setImage:[UIImage imageNamed:@"test_jiankong.png"] forState:UIControlStateNormal];
-            [jianshiBtn setBackgroundImage:[UIImage imageNamed:@"test_button.png"] forState:UIControlStateNormal];
-            [jianshiBtn addTarget:self action:@selector(toJianshiIt:) forControlEvents:UIControlEventTouchUpInside];
-            [chushiMV addSubview:jianshiBtn];
+            buyBtn.hidden=YES;
+            shoucangBtn.hidden=YES;
+            jianshiBtn.hidden=NO;
         }
-        else{
-            xiaolianMV.hidden=YES;
-            firstL.frame=CGRectMake(20, 28, 200, 15);
-            firstL.text=@"此域名未注册，体检情况如下";
-            self.buyBtn.hidden=YES;
-            self.shoucangBtn.hidden=YES;
-            self.jianshiBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-            jianshiBtn.frame=CGRectMake(220, 20, 40, 25);
-            [jianshiBtn setImage:[UIImage imageNamed:@"cart.png"] forState:UIControlStateNormal];
-            [jianshiBtn setBackgroundImage:[UIImage imageNamed:@"test_button.png"] forState:UIControlStateNormal];
-            [jianshiBtn addTarget:self action:@selector(toBuyIt:) forControlEvents:UIControlEventTouchUpInside];
-            [chushiMV addSubview:jianshiBtn];
-        }
+//        else{
+//            xiaolianMV.hidden=YES;
+//            firstL.frame=CGRectMake(20, 28, 200, 15);
+//            firstL.text=@"此域名未注册，体检情况如下";
+//            self.buyBtn.hidden=YES;
+//            self.shoucangBtn.hidden=YES;
+//            self.jianshiBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+//            jianshiBtn.frame=CGRectMake(220, 20, 40, 25);
+//            [jianshiBtn setImage:[UIImage imageNamed:@"cart.png"] forState:UIControlStateNormal];
+//            [jianshiBtn setBackgroundImage:[UIImage imageNamed:@"test_button.png"] forState:UIControlStateNormal];
+//            [jianshiBtn addTarget:self action:@selector(toBuyIt:) forControlEvents:UIControlEventTouchUpInside];
+//            [chushiMV addSubview:jianshiBtn];
+//        }
         
     }
      //获得Whois请求结果

@@ -9,6 +9,7 @@
 #import "ZixunXiangqingVC.h"
 #import "MD5.h"
 #import "JSON.h"
+#import "SHKActivityIndicator.h"
 
 @implementation ZixunXiangqingVC
 @synthesize webV;
@@ -81,7 +82,7 @@
     webV.delegate=self;
     [self.view addSubview:webV];
     [webV release];
-
+    [[SHKActivityIndicator currentIndicator] displayActivity:@"加载中..."];
     [self loadData:self.numStr];
 }
 
@@ -167,6 +168,7 @@
     self.contentStr=[dic objectForKey:@"content"];
     NSURL *url1=[NSURL URLWithString:urlS];
     [webV loadHTMLString:contentStr baseURL:url1];
+    [[SHKActivityIndicator currentIndicator] hideAfterDelay:0.5];
 }
 
 -(void)dealloc{
