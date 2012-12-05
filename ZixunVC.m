@@ -312,6 +312,7 @@
     //******修改结束
     //转化成可用字典
     NSDictionary *dic=[receiveStr JSONValue];
+    [receiveStr release];
     NSLog(@"%@",dic);
     [[SHKActivityIndicator currentIndicator]hideAfterDelay:0.5];
     switch (seg.selectedSegmentIndex) {
@@ -372,6 +373,7 @@
     NSLog(@"%@",signStr);
     //将做好的字符串进行MD5加密 
     NSString *sign = [MD5 md5Digest:signStr];
+    [signStr release];
     //将所有的参数和值进⾏行最后的拼接,使⽤用"&"连接 
     NSArray *keys = [params allKeys]; NSArray *values = [params allValues];
     NSMutableString *paramsStr = [[NSMutableString alloc] init];
@@ -561,6 +563,7 @@
     //******修改结束
     //转化成可用字典
     NSDictionary *dic=[receiveStr JSONValue];
+    [receiveStr release];
     NSLog(@"%@",dic);
     
     switch (seg.selectedSegmentIndex) {
@@ -711,6 +714,7 @@
             NSString *num=[dic objectForKey:@"id"];
             zxxqVC.numStr=num;
             [self.navigationController pushViewController:zxxqVC animated:YES];
+            [zxxqVC release];
             zxxqVC.titleL.text=@"最新资讯";
             break;}
             
@@ -719,6 +723,7 @@
             NSString *num=[dic objectForKey:@"id"];
             zxxqVC.numStr=num;
             [self.navigationController pushViewController:zxxqVC animated:YES];
+            [zxxqVC release];
             zxxqVC.titleL.text=@"行业资讯";
             break;}
             
@@ -727,6 +732,7 @@
             NSString *num=[dic objectForKey:@"id"];
             zxxqVC.numStr=num;
             [self.navigationController pushViewController:zxxqVC animated:YES];
+            [zxxqVC release];
             zxxqVC.titleL.text=@"应用资讯";
             break;}
             
@@ -735,6 +741,7 @@
             NSString *num=[dic objectForKey:@"id"];
             zxxqVC.numStr=num;
             [self.navigationController pushViewController:zxxqVC animated:YES];
+            [zxxqVC release];
             zxxqVC.titleL.text=@"价值资讯";
             break;}
             
@@ -743,6 +750,7 @@
             NSString *num=[dic objectForKey:@"id"];
             zxxqVC.numStr=num;
             [self.navigationController pushViewController:zxxqVC animated:YES];
+            [zxxqVC release];
             zxxqVC.titleL.text=@"安全资讯";
             break;}
             

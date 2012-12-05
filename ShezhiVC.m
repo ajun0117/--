@@ -111,26 +111,32 @@
         case 0:{
             ShoucangVC *shouVC=[[ShoucangVC alloc]init];
             [self.navigationController pushViewController:shouVC animated:YES];
+            [shouVC release];
             break;}
         case 1:{
             HistoryVC *historyVC=[[HistoryVC alloc]init];
             [self.navigationController pushViewController:historyVC animated:YES];
+            [historyVC release];
             break;}
         case 2:{
             XinshouVC *xinVC=[[XinshouVC alloc]init];
             [self.navigationController pushViewController:xinVC animated:YES];
+            [xinVC release];
             break;}
         case 3:{
             BanbenVC *banVC=[[BanbenVC alloc]init];
             [self.navigationController pushViewController:banVC animated:YES];
+            [banVC release];
             break;}
         case 4:{
             YijianVC *yiVC=[[YijianVC alloc]init];
             [self.navigationController pushViewController:yiVC animated:YES];
+            [yiVC release];
             break;}
         case 5:{
             BangdingVC *bangdingVC=[[BangdingVC alloc]init];
             [self.navigationController pushViewController:bangdingVC animated:YES];
+            [bangdingVC release];
             break;}
             
         default:

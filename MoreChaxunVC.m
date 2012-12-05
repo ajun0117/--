@@ -219,6 +219,7 @@
     houzhuiVC.isChina=isChina;
     houzhuiVC.navigationController.navigationBarHidden=YES;
     [self.navigationController pushViewController:houzhuiVC animated:YES];
+    [houzhuiVC release];
 }
 
 #pragma mark- 请求时间戳

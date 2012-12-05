@@ -127,6 +127,7 @@
     NSLog(@"%@",signStr);
     //将做好的字符串进行MD5加密 
     NSString *sign = [MD5 md5Digest:signStr];
+    [signStr release];
     //将所有的参数和值进⾏行最后的拼接,使⽤用"&"连接 
     NSArray *keys = [params allKeys]; NSArray *values = [params allValues];
     NSMutableString *paramsStr = [[NSMutableString alloc] init];
@@ -141,6 +142,7 @@
     [paramsStr appendFormat:@"sign=%@",sign];
     NSLog(@"%@",paramsStr);
     NSString *urlStr = [NSString stringWithFormat:@"http://zixun.www.net.cn/api/hichinaapp.php?%@",paramsStr];
+    [paramsStr release];
     NSURL *url = [NSURL URLWithString:urlStr];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     NSData *data=[NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
@@ -163,6 +165,7 @@
     //******修改结束
     //转化成可用字典
     NSDictionary *dic=[receiveStr JSONValue];
+    [receiveStr release];
     NSLog(@"%@",dic);
     self.urlS=[dic objectForKey:@"url"];
     self.contentStr=[dic objectForKey:@"content"];

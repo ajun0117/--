@@ -224,6 +224,13 @@
 }
 
 
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField
+{
+             
+    return YES;
+}
+
+
 #pragma mark---
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (tableView==resultTableView) {
@@ -304,6 +311,7 @@
     whoVC.nameStr=cell.textLabel.text;
     whoVC.navigationController.navigationBarHidden=YES;
     [self.navigationController pushViewController:whoVC animated:YES];
+    [whoVC release];
 }
 
 -(void)shoucang:(UIButton *)sender{

@@ -141,6 +141,7 @@
 		0F6CFAFF1664DCE400BC7AF3 /* TijianVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F6CFAFE1664DCE400BC7AF3 /* TijianVC.m */; };
 		0F6CFB031664DD6100BC7AF3 /* ZixunVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F6CFB021664DD6100BC7AF3 /* ZixunVC.m */; };
 		0F6CFB071664DD7C00BC7AF3 /* ShezhiVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F6CFB061664DD7C00BC7AF3 /* ShezhiVC.m */; };
+		0F85C49C166DE92B004EA8AD /* face14.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F85C49B166DE92B004EA8AD /* face14.png */; };
 		0F8786CD166AFC0C00E6838E /* SHKActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F8786C7166AFC0B00E6838E /* SHKActivityIndicator.m */; };
 		0F8786CE166AFC0C00E6838E /* UIDevice+Orientation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F8786CA166AFC0B00E6838E /* UIDevice+Orientation.m */; };
 		0F8786CF166AFC0C00E6838E /* UILabel+Size.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F8786CC166AFC0C00E6838E /* UILabel+Size.m */; };
@@ -329,6 +330,7 @@
 		0F6CFB021664DD6100BC7AF3 /* ZixunVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZixunVC.m; sourceTree = "<group>"; };
 		0F6CFB051664DD7C00BC7AF3 /* ShezhiVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShezhiVC.h; sourceTree = "<group>"; };
 		0F6CFB061664DD7C00BC7AF3 /* ShezhiVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShezhiVC.m; sourceTree = "<group>"; };
+		0F85C49B166DE92B004EA8AD /* face14.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = face14.png; sourceTree = "<group>"; };
 		0F8786C6166AFC0B00E6838E /* SHKActivityIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHKActivityIndicator.h; sourceTree = "<group>"; };
 		0F8786C7166AFC0B00E6838E /* SHKActivityIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHKActivityIndicator.m; sourceTree = "<group>"; };
 		0F8786C8166AFC0B00E6838E /* SHKDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHKDefine.h; sourceTree = "<group>"; };
@@ -434,7 +436,6 @@
 				0F89A00A1669E259005AD084 /* 自定义TableView */,
 				0F87D5F51667230A0091A746 /* JSON */,
 				0F87D5F0166720F20091A746 /* MD5 */,
-				0F88E8D51665FBBF009BDFD1 /* 重写cell */,
 				0F6CFB041664DD6500BC7AF3 /* 设置 */,
 				0F6CFB001664DD3800BC7AF3 /* 域名资讯 */,
 				0F6CFAFC1664DCC300BC7AF3 /* 域名体检 */,
@@ -503,6 +504,7 @@
 		0F6CF9F11664C4E400BC7AF3 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				0F85C49B166DE92B004EA8AD /* face14.png */,
 				0F88E8D616662F26009BDFD1 /* 虚线.png */,
 				0F6CF9F21664C4E400BC7AF3 /* addM.png */,
 				0F6CF9F31664C4E400BC7AF3 /* app_pic */,
@@ -952,13 +954,6 @@
 			name = "微博绑定";
 			sourceTree = "<group>";
 		};
-		0F88E8D51665FBBF009BDFD1 /* 重写cell */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "重写cell";
-			sourceTree = "<group>";
-		};
 		0F892B241668B8E600412DF6 /* WHOIS */ = {
 			isa = PBXGroup;
 			children = (
@@ -1164,6 +1159,7 @@
 				0F892B2A1668D89F00412DF6 /* File in Resources */,
 				0F89A00C1669EA7A005AD084 /* blueArrowDown.png in Resources */,
 				0F89A00E1669EAA0005AD084 /* blueArrow.png in Resources */,
+				0F85C49C166DE92B004EA8AD /* face14.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

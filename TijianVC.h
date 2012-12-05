@@ -10,6 +10,9 @@
 #import "ASINetworkQueue.h"
 
 @interface TijianVC : UIViewController<UITextFieldDelegate,ASIHTTPRequestDelegate>
+{
+        int count;//用于判定请求完成的
+}
 @property(retain,nonatomic)UIImageView *chushiMV;
 @property(retain,nonatomic)UILabel *firstL;
 @property(retain,nonatomic)UIImageView *xiaolianMV;

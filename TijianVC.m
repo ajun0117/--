@@ -10,6 +10,7 @@
 #import "JSON.h"
 #import "ASIFormDataRequest.h"
 #import "TJxiangxiVC.h"
+#import "SHKActivityIndicator.h"
 
 @implementation TijianVC
 //@synthesize zhuangtaiStr,dnsStr;
@@ -29,6 +30,7 @@
     if (self) {
         // Custom initialization
         self.xiangxiDic=[NSMutableDictionary dictionary];
+        count=0;
     }
     return self;
 }
@@ -101,31 +103,31 @@
     
     self.xiaolianMV=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"smile.png"]];
     xiaolianMV.frame=CGRectMake(0, 0, 30, 30);
-    xiaolianMV.center=CGPointMake(35, chushiMV.frame.size.height/2);
+    xiaolianMV.center=CGPointMake(30, chushiMV.frame.size.height/2);
     [chushiMV addSubview:xiaolianMV];
     
-    self.firstL=[[UILabel alloc]initWithFrame:CGRectMake(60, 28, 200, 15)];
+    self.firstL=[[UILabel alloc]initWithFrame:CGRectMake(53, 28, 200, 15)];
     firstL.backgroundColor=[UIColor clearColor];
-    firstL.font=[UIFont boldSystemFontOfSize:15];
+    firstL.font=[UIFont boldSystemFontOfSize:14];
     firstL.text=@"此域名未被注册。";
     [chushiMV addSubview:firstL];
     
     self.buyBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    buyBtn.frame=CGRectMake(220, 10, 40, 25);
+    buyBtn.frame=CGRectMake(235, 10, 40, 25);
     [buyBtn setImage:[UIImage imageNamed:@"cart.png"] forState:UIControlStateNormal];
     [buyBtn setBackgroundImage:[UIImage imageNamed:@"test_button.png"] forState:UIControlStateNormal];
     [buyBtn addTarget:self action:@selector(toBuyIt:) forControlEvents:UIControlEventTouchUpInside];
     [chushiMV addSubview:buyBtn];
     
     self.shoucangBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    shoucangBtn.frame=CGRectMake(220, 35, 40, 25);
+    shoucangBtn.frame=CGRectMake(235, 35, 40, 25);
     [shoucangBtn setImage:[UIImage imageNamed:@"keep.png"] forState:UIControlStateNormal];
     [shoucangBtn setBackgroundImage:[UIImage imageNamed:@"test_button.png"] forState:UIControlStateNormal];
     [shoucangBtn addTarget:self action:@selector(toShoucangIt:) forControlEvents:UIControlEventTouchUpInside];
     [chushiMV addSubview:shoucangBtn];
     
     self.jianshiBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    jianshiBtn.frame=CGRectMake(220, 20, 40, 25);
+    jianshiBtn.frame=CGRectMake(235, 20, 40, 25);
     [jianshiBtn setImage:[UIImage imageNamed:@"test_jiankong.png"] forState:UIControlStateNormal];
     [jianshiBtn setBackgroundImage:[UIImage imageNamed:@"test_button.png"] forState:UIControlStateNormal];
     [jianshiBtn addTarget:self action:@selector(toJianshiIt:) forControlEvents:UIControlEventTouchUpInside];
@@ -139,7 +141,7 @@
     [self.view addSubview:zhuangtaiMV];
     
     UIButton *button1=[UIButton buttonWithType:UIButtonTypeCustom];
-    button1.frame=CGRectMake(220, 15, 40, 25);
+    button1.frame=CGRectMake(235, 12, 40, 25);
     button1.tag=100;
     [button1 setImage:[UIImage imageNamed:@"detailbutton.png"] forState:UIControlStateNormal];
     [button1 setBackgroundImage:[UIImage imageNamed:@"test_button.png"] forState:UIControlStateNormal];
@@ -160,7 +162,7 @@
     [self.view addSubview:dnsMV];
     
     UIButton *button2=[UIButton buttonWithType:UIButtonTypeCustom];
-    button2.frame=CGRectMake(220, 15, 40, 25);
+    button2.frame=CGRectMake(235, 12, 40, 25);
     button2.tag=200;
     [button2 setImage:[UIImage imageNamed:@"detailbutton.png"] forState:UIControlStateNormal];
     [button2 setBackgroundImage:[UIImage imageNamed:@"test_button.png"] forState:UIControlStateNormal];
@@ -181,7 +183,7 @@
     [self.view addSubview:fangwenMV];
     
     UIButton *button3=[UIButton buttonWithType:UIButtonTypeCustom];
-    button3.frame=CGRectMake(220, 15, 40, 25);
+    button3.frame=CGRectMake(235, 12, 40, 25);
     button3.tag=300;
     [button3 setImage:[UIImage imageNamed:@"detailbutton.png"] forState:UIControlStateNormal];
     [button3 setBackgroundImage:[UIImage imageNamed:@"test_button.png"] forState:UIControlStateNormal];
@@ -202,7 +204,7 @@
     [self.view addSubview:countMV];
     
     UIButton *button4=[UIButton buttonWithType:UIButtonTypeCustom];
-    button4.frame=CGRectMake(220, 15, 40, 25);
+    button4.frame=CGRectMake(235, 12, 40, 25);
     button4.tag=400;
     [button4 setImage:[UIImage imageNamed:@"detailbutton.png"] forState:UIControlStateNormal];
     [button4 setBackgroundImage:[UIImage imageNamed:@"test_button.png"] forState:UIControlStateNormal];
@@ -233,6 +235,7 @@
 
 -(void)toSearch{
     [searTextF resignFirstResponder];
+    [[SHKActivityIndicator currentIndicator] displayActivity:@"正在体检..."];
     [xiangxiDic removeAllObjects];//删除字典中所有元素
     zhuangtaiMV.image=[UIImage imageNamed:@"test_return.png"];
     dnsMV.image=[UIImage imageNamed:@"test_return.png"];
@@ -317,48 +320,35 @@
       //获得check请求结果
     if ([name isEqualToString:@"req0"]) 
     {
+        count++;
         NSString *checkStr=[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
         NSDictionary *checkDic=[checkStr JSONValue];
-        NSLog(@"checkDic-------------%@",checkDic);
+//        NSLog(@"checkDic-------------%@",checkDic);
         NSArray *statusArray=[[checkDic objectForKey:@"results"] objectForKey:@"domainnames"];
         NSString *statusStr=[[statusArray objectAtIndex:0] objectForKey:@"status"];
-        NSLog(@"statusStr------------%@",statusStr);
+//        NSLog(@"statusStr------------%@",statusStr);
          if ([statusStr intValue]==0) {//如果次域名未被注册
              xiaolianMV.image=[UIImage imageNamed:@"smile.png"];
              buyBtn.hidden=NO;
              shoucangBtn.hidden=NO;
              jianshiBtn.hidden=YES;
-             firstL.frame=CGRectMake(60, 28, 200, 15);
             firstL.text=@"恭喜你！此域名未被注册";
         }
             else{
             xiaolianMV.image=[UIImage imageNamed:@"face14.png"];
-            firstL.text=@"此域名已注册，体检情况如下";
+            firstL.text=@"此域名已注册,体检情况如下:";
             buyBtn.hidden=YES;
             shoucangBtn.hidden=YES;
             jianshiBtn.hidden=NO;
         }
-//        else{
-//            xiaolianMV.hidden=YES;
-//            firstL.frame=CGRectMake(20, 28, 200, 15);
-//            firstL.text=@"此域名未注册，体检情况如下";
-//            self.buyBtn.hidden=YES;
-//            self.shoucangBtn.hidden=YES;
-//            self.jianshiBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-//            jianshiBtn.frame=CGRectMake(220, 20, 40, 25);
-//            [jianshiBtn setImage:[UIImage imageNamed:@"cart.png"] forState:UIControlStateNormal];
-//            [jianshiBtn setBackgroundImage:[UIImage imageNamed:@"test_button.png"] forState:UIControlStateNormal];
-//            [jianshiBtn addTarget:self action:@selector(toBuyIt:) forControlEvents:UIControlEventTouchUpInside];
-//            [chushiMV addSubview:jianshiBtn];
-//        }
-        
     }
      //获得Whois请求结果
     if ([name isEqualToString:@"req1"]) 
     {
+        count++;
         NSString *receiveStr=[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
         NSDictionary *whoisDic=[receiveStr JSONValue];
-        NSLog(@"whoisdic-------------%@",whoisDic);
+//        NSLog(@"whoisdic-------------%@",whoisDic);
         NSDictionary *dicc=[whoisDic objectForKey:@"results"];
         NSDictionary *resultDic=[dicc objectForKey:@"whois"];
         
@@ -399,9 +389,10 @@
     //获得www访问请求结果
     if ([name isEqualToString:@"req2"]) 
     {
+        count++;
         NSString *wwwReceiveStr=[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
         NSDictionary *wwwDic=[wwwReceiveStr JSONValue];
-        NSLog(@"wwwwwdic-------------%@",wwwDic);
+//        NSLog(@"wwwwwdic-------------%@",wwwDic);
         
         UILabel *wwwL=[[UILabel alloc]initWithFrame:CGRectMake(20, 40, 200, 15)];
         wwwL.font=[UIFont systemFontOfSize:12];
@@ -438,6 +429,7 @@
       //获得为注册域名数请求结果
     if ([name isEqualToString:@"req3"]) 
     {
+        count++;
         NSString *noDomainNameStr=[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
         NSDictionary *noDomainNameDic=[noDomainNameStr JSONValue];
         NSLog(@"noDomainNameDic-------------%@",noDomainNameDic);
@@ -454,61 +446,13 @@
             [xiangxiDic setObject:noDic forKey:[NSNumber numberWithInt:400]];//对应未注册详细按钮
             }
     }
-    NSLog(@"xiangxiDic-------0000------%@",xiangxiDic);
+//    NSLog(@"xiangxiDic-------0000------%@",xiangxiDic);
+    NSLog(@"count---------%d",count);
+    if (count==4) {
+        [[SHKActivityIndicator currentIndicator] hideAfterDelay:0.5];
+        count=0;
+    }
 }
-
-//-(void)toSearch{//开始体检
-//    
-//    NSString *encodeStr=[self.searTextF.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];//进行编码
-//    self.dic=[NSDictionary dictionaryWithObjectsAndKeys:encodeStr,@"domainname", nil];//这里是domainname 注意！！！
-//    NSLog(@"dic----%@",dic);
-//    self.tokenStr=[NSString stringWithFormat:@"%@_%@1",TOKEN,[self timestamp]];
-//    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
-//                            dic,@"data",
-//                            @"1.0",@"v",
-//                            @"whois",@"method",
-//                            tokenStr,@"trid",
-//                            @"ios",@"client",nil];
-//    NSURL *url=[NSURL URLWithString:@"http://hiapp.hichina.com:8080/hiapp/json/whois/"];
-//    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:15];
-//    [request setHTTPMethod:@"POST"];
-//    NSString *arguments=[NSString stringWithFormat:@"req=%@",params];
-//    NSLog(@"arguments -----%@",arguments);
-//    NSData *postData=[arguments dataUsingEncoding:NSUTF8StringEncoding];
-//    [request setHTTPBody:postData];
-//   NSData *data=[NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-//    [request release];
-//    
-//    NSString *receiveStr=[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-//    NSDictionary *whoisDic=[receiveStr JSONValue];
-//    NSLog(@"dic-------------%@",whoisDic);
-//    NSString *dnsStr=[dic objectForKey:@"dnsserver"];//DNS服务器
-//    NSString *zhuangtaiStr=[dic objectForKey:@"domainstatus"];//域名状态
-//
-//    [self performSelector:@selector(wwwJiancha) withObject:nil afterDelay:1.f];
-//}
-//
-//-(void)wwwJiancha{
-//    
-//    NSString *tokenS=[NSString stringWithFormat:@"%@_%@1",TOKEN,[self timestamp]];
-//    NSDictionary *wwwparams = [NSDictionary dictionaryWithObjectsAndKeys:
-//                               dic,@"data",
-//                               @"1.0",@"v",tokenS,@"trid",
-//                               @"wwwrecord",@"method",
-//                               @"ios",@"client",nil];
-//    NSURL *wwwUrl=[NSURL URLWithString:@"http://hiapp.hichina.com/hiapp/json/wwwrecord/"];
-//    NSMutableURLRequest *wwwRequest=[[NSMutableURLRequest alloc]initWithURL:wwwUrl cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:15];
-//    [wwwRequest setHTTPMethod:@"POST"];
-//    NSString *wwwArguments=[NSString stringWithFormat:@"req=%@",wwwparams];
-//    NSLog(@"wwwwwwarguments -----%@",wwwArguments);
-//    NSData *wwwPostData=[wwwArguments dataUsingEncoding:NSUTF8StringEncoding];
-//    [wwwRequest setHTTPBody:wwwPostData];
-//    NSData *wwwData=[NSURLConnection sendSynchronousRequest:wwwRequest returningResponse:nil error:nil];
-//    [wwwRequest release];
-//    NSString *wwwReceiveStr=[[NSString alloc]initWithData:wwwData encoding:NSUTF8StringEncoding];
-//    NSDictionary *wwwDic=[wwwReceiveStr JSONValue];
-//    NSLog(@"wwwwwdic-------------%@",wwwDic);
-//}
 
 #pragma mark- 请求时间戳
 -(NSString *)timestamp{
@@ -523,6 +467,7 @@
     tjXiangVC.navigationController.navigationBarHidden=YES;
     tjXiangVC.listDic=[xiangxiDic objectForKey:[NSNumber numberWithInt:sender.tag]];
     [self.navigationController pushViewController:tjXiangVC animated:YES];
+    [tjXiangVC release];
 }
 
 
